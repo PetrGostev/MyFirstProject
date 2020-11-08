@@ -9,14 +9,19 @@ import android.os.Bundle
 
 class TwoActivity : AppCompatActivity() {
     companion object {
+        const val TEXT_DETECTED = "ru.petrgostev.myfirstproject.action.TEXT"
         const val TEXT: String = "TEXT"
+
+        fun createIntent(context: Context): Intent =
+            Intent(context, TwoActivity::class.java)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_two)
 
-        val myIntentService = Intent(this, MyIntentService::class.java)
-        startService(myIntentService.putExtra("time", 3))
+        val myIntentService = MyIntentService.createIntent(this, 3)
+        startService(myIntentService)
     }
 
     override fun onStart() {

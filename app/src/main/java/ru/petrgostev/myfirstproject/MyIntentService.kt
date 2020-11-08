@@ -1,31 +1,41 @@
 package ru.petrgostev.myfirstproject
 
-import android.annotation.SuppressLint
 import android.app.IntentService
+import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import java.text.SimpleDateFormat
 import java.util.*
 
-const val TEXT_DETECTED = "ru.petrgostev.myfirstproject.action.TEXT"
-
 class MyIntentService : IntentService("MyIntentService") {
     companion object {
+        const val TEXT_DETECTED = "ru.petrgostev.myfirstproject.action.TEXT"
+        const val DELAY_TIME: String = "DELAY_TIME"
         const val TEXT: String = "TEXT"
+
+        fun createIntent(context: Context, time: Int): Intent =
+            Intent(context, MyIntentService::class.java)
+                .putExtra(DELAY_TIME, 3)
     }
 
     override fun onHandleIntent(intent: Intent?) {
-        val time: Int = intent?.getIntExtra("time", 0) ?: 0
-        { sendBroadcast(Intent(TEXT_DETECTED).putExtra(TEXT, getCurrentDate())) }.withDelay(time.toLong())
+        val time: Int = intent?.getIntExtra(DELAY_TIME, 0) ?: 0
+        {
+            sendBroadcast(
+                Intent(TEXT_DETECTED).putExtra(
+                    TEXT,
+                    getCurrentDate()
+                )
+            )
+        }.withDelay(time.toLong())
     }
 
     fun <R> (() -> R).withDelay(delay: Long) {
         Handler().postDelayed({ this.invoke() }, delay)
     }
 
-    @SuppressLint("SimpleDateFormat")
-    fun getCurrentDate():String {
-        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+    fun getCurrentDate(): String {
+        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss", Locale.US)
         return sdf.format(Date())
     }
 }
