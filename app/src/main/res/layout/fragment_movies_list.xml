@@ -11,14 +11,14 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/combined_shape"
+            android:id="@+id/badge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="56dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/vector_combined_shape"
+            app:srcCompat="@drawable/vector_badge"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -28,11 +28,11 @@
             android:text="@string/movies_list"
             android:textColor="@color/colorWhite"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/combined_shape"
-            app:layout_constraintStart_toEndOf="@+id/combined_shape"
-            app:layout_constraintTop_toTopOf="@+id/combined_shape" />
+            app:layout_constraintBottom_toBottomOf="@+id/badge"
+            app:layout_constraintStart_toEndOf="@+id/badge"
+            app:layout_constraintTop_toTopOf="@+id/badge" />
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="170dp"
             android:layout_height="296dp"
             android:layout_gravity="center"
@@ -40,7 +40,7 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/vector_bg"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/combined_shape">
+            app:layout_constraintTop_toBottomOf="@+id/badge">
 
             <ImageView
                 android:id="@+id/image"
@@ -49,10 +49,10 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="1dp"
-                android:layout_marginEnd="2dp"
                 android:foreground="@drawable/vector_gradient"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/movie"
                 tools:ignore="ContentDescription,UnusedAttribute" />
 
@@ -60,22 +60,26 @@
                 android:id="@+id/age_limit"
                 android:layout_width="24dp"
                 android:layout_height="16dp"
-                android:layout_marginStart="6dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginStart="8dp"
                 android:background="@drawable/vector_rectangle"
                 android:gravity="center"
                 android:textColor="@color/colorWhite"
                 android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="13+" />
 
             <ImageView
                 android:id="@+id/like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="8dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_marginTop="13dp"
-                android:layout_marginEnd="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/vector_like" />
 
             <TextView
@@ -86,27 +90,24 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="214dp"
-                android:layout_marginEnd="14dp"
+                android:layout_marginTop="187dp"
                 android:textColor="@color/colorTextCategory"
                 android:textSize="8sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/like"
                 tools:text="Action, Adventure, Fantasy" />
 
             <RatingBar
                 android:id="@+id/rating"
-                style="?android:attr/ratingBarStyleSmall"
+                style="?attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/category"
-                android:layout_marginStart="-6dp"
-                android:layout_marginTop="4dp"
-                android:isIndicator="true"
-                android:numStars="5"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="8dp"
                 android:rating="3"
-                android:scaleX="0.7"
-                android:scaleY="0.7"
-                android:stepSize="0.1"
-                android:theme="@style/RatingBar" />
+                android:theme="@style/RatingBar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/category" />
 
             <TextView
                 android:id="@+id/reviews_quantity"
@@ -115,14 +116,15 @@
                 android:layout_alignBaseline="@+id/rating"
                 android:layout_alignTop="@+id/rating"
                 android:layout_alignBottom="@+id/rating"
-                android:layout_marginStart="-8dp"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="0dp"
+                android:layout_marginStart="62dp"
+                android:layout_marginTop="4dp"
                 android:layout_toEndOf="@+id/rating"
                 android:gravity="center_vertical"
                 android:textAllCaps="true"
                 android:textColor="@color/colorTextReview"
                 android:textSize="8sp"
+                app:layout_constraintStart_toStartOf="@+id/rating"
+                app:layout_constraintTop_toTopOf="@+id/rating"
                 tools:ignore="SmallSp"
                 tools:text="125 Reviews" />
 
@@ -132,13 +134,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/image"
                 android:layout_alignStart="@+id/category"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
                 android:singleLine="false"
                 android:textColor="@color/colorWhite"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/reviews_quantity"
                 tools:text="Avengers: End Game" />
 
             <TextView
@@ -147,14 +150,15 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/name"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="0dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/duration_text"
                 android:textAllCaps="true"
                 android:textColor="@color/colorTextReview"
-                android:textSize="8sp" />
+                android:textSize="8sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

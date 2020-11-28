@@ -19,9 +19,17 @@
         <item name="android:text">@string/text_back</item>
     </style>
 
-    <style name="RatingBar" parent="Theme.AppCompat">
+    <style name="RatingBar" parent="Widget.AppCompat.RatingBar.Small">
         <item name="colorControlNormal">@color/colorWhite</item>
         <item name="colorControlActivated">@color/colorTextCategory</item>
+        <item name="android:numStars">5</item>
+        <item name="android:isIndicator">true</item>
+        <item name="android:scaleX">0.7</item>
+        <item name="android:scaleY">0.7</item>
+        <item name="android:stepSize">0.1</item>
+        <item name="android:transformPivotY">12dp</item>
+        <item name="android:layout_gravity">center</item>
+
     </style>
 
 </resources>
