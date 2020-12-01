@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">MyFirstProject</string>
     <string name="text_back">Back</string>
+    <string name="storyline">Storyline</string>
+    <string name="after_the_devastating_events_of_avengers_infinity_war_the_universe_is_in_ruins_with_the_help_of_remaining_allies_the_avengers_assemble_once_more_in_order_to_reverse_thanos_actions_and_restore_balance_to_the_universe">After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos\' actions and restore balance to the universe.</string>
+    <string name="movies_list">Movies list</string>
+    <string name="duration_text">137 min</string>
 </resources>
