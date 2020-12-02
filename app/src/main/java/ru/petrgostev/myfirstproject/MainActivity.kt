@@ -2,6 +2,7 @@ package ru.petrgostev.myfirstproject
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import ru.petrgostev.myfirstproject.MoviesList.MoviesListFragment
 
 class MainActivity : AppCompatActivity() {
 

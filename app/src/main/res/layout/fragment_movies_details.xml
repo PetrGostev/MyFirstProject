@@ -41,7 +41,7 @@
             android:textSize="12sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/back_button"
-            tools:text="13+" />
+            tools:text="@string/age_limit" />
 
         <TextView
             android:id="@+id/name"
@@ -70,19 +70,19 @@
             app:layout_constraintTop_toBottomOf="@+id/name"
             tools:text="Action, Adventure, Fantasy" />
 
-        <RatingBar
+        <com.aids61517.easyratingview.EasyRatingView
             android:id="@+id/rating"
-            style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:isIndicator="true"
-            android:numStars="5"
-            android:rating="3"
-            android:stepSize="0.1"
-            android:theme="@style/RatingBar"
+            app:emptyDrawable="@drawable/vector_star_empty"
+            app:fullDrawable="@drawable/vector_star_full"
             app:layout_constraintStart_toStartOf="@+id/name"
-            app:layout_constraintTop_toBottomOf="@+id/category" />
+            app:layout_constraintTop_toBottomOf="@+id/category"
+            app:numStars="5"
+            app:rating="3.8"
+            app:spacing="2dp"
+            app:step="0.1" />
 
         <TextView
             android:id="@+id/reviews_quantity"
@@ -126,15 +126,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:text="@string/cast"
             android:textColor="@color/colorWhite"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/name"
             app:layout_constraintStart_toStartOf="@+id/name"
-            app:layout_constraintTop_toBottomOf="@+id/storyline_text"
-            tools:text="Cast" />
+            app:layout_constraintTop_toBottomOf="@+id/storyline_text" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/actors_recycler"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -144,7 +145,7 @@
             app:layout_constraintStart_toStartOf="@+id/name"
             app:layout_constraintTop_toBottomOf="@+id/cast_title"
             tools:itemCount="5"
-            tools:listitem="@layout/cast_card" />
+            tools:listitem="@layout/view_holder_actor" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
