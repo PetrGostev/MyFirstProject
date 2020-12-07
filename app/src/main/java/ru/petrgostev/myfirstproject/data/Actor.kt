@@ -5,6 +5,6 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Actor(
-    var actorName: String,
-    var actorImage: Int
+    val actorName: String,
+    val actorImage: Int
 ) : Parcelable

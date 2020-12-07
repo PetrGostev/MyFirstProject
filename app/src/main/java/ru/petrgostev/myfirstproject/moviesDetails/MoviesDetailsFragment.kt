@@ -2,6 +2,7 @@ package ru.petrgostev.myfirstproject.moviesDetails
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.moviesDetails.adapter.ActorViewsAdapter
@@ -11,18 +12,17 @@ import ru.petrgostev.myfirstproject.databinding.FragmentMoviesDetailsBinding
 class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
 
     companion object {
-        private const val MOVIE = "MOVIE"
+        private const val ARG_MOVIE = "movie"
 
         fun newInstance(movie: Movie): MoviesDetailsFragment {
-            val fragment = MoviesDetailsFragment()
-            val args = Bundle()
-            args.putParcelable(MOVIE, movie)
-            fragment.arguments = args
-            return fragment
+            return MoviesDetailsFragment().apply {
+                arguments = bundleOf(
+                    ARG_MOVIE to movie
+                )
+            }
         }
     }
 
-    private lateinit var adapter: ActorViewsAdapter
     private var viewBinding: FragmentMoviesDetailsBinding? = null
     private var movie: Movie? = null
 
@@ -30,7 +30,7 @@ class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
         super.onViewCreated(view, savedInstanceState)
 
         viewBinding = FragmentMoviesDetailsBinding.bind(view)
-        movie = arguments?.getParcelable(MOVIE)
+        movie = arguments?.getParcelable(ARG_MOVIE)
 
         setupViews()
     }
@@ -41,18 +41,19 @@ class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
     }
 
     private fun setupViews() {
-        viewBinding!!.ageLimit.text = requireActivity().getString(R.string.age_limit, movie?.ageLimit)
-        viewBinding!!.name.text = movie?.name?:""
-        viewBinding!!.category.text = movie?.category
-        viewBinding!!.rating.rating = movie?.rating!!
-        viewBinding!!.reviewsQuantity.text = requireActivity().getString(R.string.reviews_quantity, movie?.reviewsQuantity)
+        val adapter = ActorViewsAdapter()
 
-        adapter = ActorViewsAdapter(requireContext())
-        viewBinding!!.actorsRecycler.adapter = adapter
-        adapter.submitList(movie?.actors)
-
-        viewBinding!!.backButton.setOnClickListener{
-            requireActivity().onBackPressed()
+        with(viewBinding) {
+            this?.ageLimit?.text = requireActivity().getString(R.string.age_limit, movie?.ageLimit)
+            this?.name?.text = movie?.name.orEmpty()
+            this?.category?.text = movie?.category
+            this?.rating?.rating = movie?.rating?: 0.0f
+            this?.reviewsQuantity?.text = requireActivity().getString(R.string.reviews_quantity, movie?.reviewsQuantity)
+            this?.actorsRecycler?.adapter = adapter
+            adapter.submitList(movie?.actors)
+            this?.backButton?.setOnClickListener {
+                requireActivity().onBackPressed()
+            }
         }
     }
 }
