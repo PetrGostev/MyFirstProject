@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    app:cardBackgroundColor="@color/colorBackground">
+
+    <ImageView
+        android:id="@+id/actor_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:srcCompat="@drawable/image_cast" />
+
+    <TextView
+        android:id="@+id/actor_name"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="86dp"
+        android:textColor="@color/colorTextCast"
+        android:textSize="12sp"
+        tools:text="Robert Downey Jr." />
+
+</com.google.android.material.card.MaterialCardView>
