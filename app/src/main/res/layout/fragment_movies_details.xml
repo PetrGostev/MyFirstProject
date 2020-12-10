@@ -10,6 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/image"
+            app:layout_constraintTop_toTopOf="@+id/image" />
+
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
@@ -29,7 +37,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/age_limit"
+            android:id="@+id/minimum_age"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
@@ -44,7 +52,7 @@
             tools:text="@string/age_limit" />
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -56,18 +64,18 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/age_limit"
+            app:layout_constraintTop_toBottomOf="@+id/minimum_age"
             tools:text="Avengers: End Game" />
 
         <TextView
-            android:id="@+id/category"
+            android:id="@+id/genres"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/colorTextCategory"
             android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="@+id/name"
-            app:layout_constraintStart_toStartOf="@+id/name"
-            app:layout_constraintTop_toBottomOf="@+id/name"
+            app:layout_constraintEnd_toEndOf="@+id/title"
+            app:layout_constraintStart_toStartOf="@+id/title"
+            app:layout_constraintTop_toBottomOf="@+id/title"
             tools:text="Action, Adventure, Fantasy" />
 
         <com.aids61517.easyratingview.EasyRatingView
@@ -77,8 +85,8 @@
             android:layout_marginTop="4dp"
             app:emptyDrawable="@drawable/vector_star_empty"
             app:fullDrawable="@drawable/vector_star_full"
-            app:layout_constraintStart_toStartOf="@+id/name"
-            app:layout_constraintTop_toBottomOf="@+id/category"
+            app:layout_constraintStart_toStartOf="@+id/title"
+            app:layout_constraintTop_toBottomOf="@+id/genres"
             app:numStars="5"
             app:rating="3.8"
             app:spacing="2dp"
@@ -117,12 +125,12 @@
             android:text="@string/after_the_devastating_events_of_avengers_infinity_war_the_universe_is_in_ruins_with_the_help_of_remaining_allies_the_avengers_assemble_once_more_in_order_to_reverse_thanos_actions_and_restore_balance_to_the_universe"
             android:textColor="@color/colorWhite"
             android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="@+id/name"
-            app:layout_constraintStart_toStartOf="@+id/name"
+            app:layout_constraintEnd_toEndOf="@+id/title"
+            app:layout_constraintStart_toStartOf="@+id/title"
             app:layout_constraintTop_toBottomOf="@+id/storyline_title" />
 
         <TextView
-            android:id="@+id/cast_title"
+            android:id="@+id/actor_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -130,8 +138,8 @@
             android:textColor="@color/colorWhite"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/name"
-            app:layout_constraintStart_toStartOf="@+id/name"
+            app:layout_constraintEnd_toEndOf="@+id/title"
+            app:layout_constraintStart_toStartOf="@+id/title"
             app:layout_constraintTop_toBottomOf="@+id/storyline_text" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -141,9 +149,9 @@
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="@+id/name"
-            app:layout_constraintStart_toStartOf="@+id/name"
-            app:layout_constraintTop_toBottomOf="@+id/cast_title"
+            app:layout_constraintEnd_toEndOf="@+id/title"
+            app:layout_constraintStart_toStartOf="@+id/title"
+            app:layout_constraintTop_toBottomOf="@+id/actor_title"
             tools:itemCount="5"
             tools:listitem="@layout/view_holder_actor" />
 

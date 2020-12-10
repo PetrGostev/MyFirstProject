@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import ru.petrgostev.myfirstproject.MoviesList.adapter.MovieViewHolder
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.moviesDetails.adapter.ActorViewsAdapter
 import ru.petrgostev.myfirstproject.data.Movie
@@ -43,17 +46,40 @@ class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
     private fun setupViews() {
         val adapter = ActorViewsAdapter()
 
+        val genres = arrayListOf<String>()
+        movie?.genres?.forEach { i ->
+            genres.add(i.name)
+        }
+
         with(viewBinding) {
-            this?.ageLimit?.text = requireActivity().getString(R.string.age_limit, movie?.ageLimit)
-            this?.name?.text = movie?.name.orEmpty()
-            this?.category?.text = movie?.category
-            this?.rating?.rating = movie?.rating?: 0.0f
-            this?.reviewsQuantity?.text = requireActivity().getString(R.string.reviews_quantity, movie?.reviewsQuantity)
+            this?.minimumAge?.text = requireActivity().getString(R.string.age_limit, movie?.minimumAge)
+            this?.title?.text = movie?.title.orEmpty()
+            this?.genres?.text = genres.joinToString()
+            this?.rating?.rating = movie?.ratings?.div(2) ?: 0.0f
+            this?.reviewsQuantity?.text = requireActivity().getString(R.string.reviews_quantity, movie?.numberOfRatings)
+            this?.storylineText?.text = movie?.overview
+
+            if (movie?.actors != null && movie?.actors?.isEmpty() == false) {
+                this?.actorTitle?.visibility = View.VISIBLE
+            } else {
+                this?.actorTitle?.visibility = View.GONE
+            }
+
             this?.actorsRecycler?.adapter = adapter
+
             adapter.submitList(movie?.actors)
+
             this?.backButton?.setOnClickListener {
                 requireActivity().onBackPressed()
             }
+
+            Glide.with(requireContext())
+                .load(movie?.backdrop)
+                .apply(
+                    RequestOptions()
+                    .fallback(R.drawable.poster_none)
+                )
+                .into(this?.image)
         }
     }
 }

@@ -18,10 +18,10 @@ class ActorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val viewBinding = ViewHolderActorBinding.bind(itemView)
 
     fun onBind(actor: Actor) {
-        viewBinding.actorName.text = actor.actorName
+        viewBinding.actorName.text = actor.name
 
         Glide.with(itemView.context)
-            .load(actor.actorImage)
+            .load(actor.picture)
             .apply(imageOption)
             .into(viewBinding.actorImage)
     }

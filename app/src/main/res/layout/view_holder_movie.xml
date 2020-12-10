@@ -4,10 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="170dp"
     android:layout_height="296dp"
-    android:layout_marginBottom="12dp"
     android:layout_marginStart="6dp"
     android:layout_marginEnd="6dp"
+    android:layout_marginBottom="12dp"
     android:background="@drawable/vector_bg">
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="@+id/movie_image_poster"
+        app:layout_constraintStart_toStartOf="@+id/movie_image_poster"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/movie_image_poster"
@@ -55,7 +63,7 @@
         tools:ignore="VectorDrawableCompat" />
 
     <TextView
-        android:id="@+id/movie_category"
+        android:id="@+id/movie_genres"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -105,33 +113,37 @@
         tools:text="@string/reviews_quantity" />
 
     <TextView
-        android:id="@+id/movie_name"
+        android:id="@+id/movie_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/movie_image_poster"
-        android:layout_alignStart="@+id/movie_category"
+        android:layout_alignStart="@+id/movie_genres"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:singleLine="false"
+        android:paddingEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
         android:textColor="@color/colorWhite"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/movie_reviews_quantity"
-        tools:text="Avengers: End Game" />
+        tools:text="Avengers: End Game"
+        tools:ignore="RtlSymmetry" />
 
     <TextView
-        android:id="@+id/movie_duration"
+        android:id="@+id/movie_runtime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/movie_name"
+        android:layout_alignStart="@+id/movie_title"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="8dp"
         android:textAllCaps="true"
         android:textColor="@color/colorTextReview"
         android:textSize="8sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/movie_name"
-        tools:text="@string/duration_text" />
+        app:layout_constraintTop_toBottomOf="@+id/movie_title"
+        tools:text="@string/runtime_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
