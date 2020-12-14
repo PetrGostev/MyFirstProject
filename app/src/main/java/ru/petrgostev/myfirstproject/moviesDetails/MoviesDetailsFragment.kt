@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.moviesDetails.adapter.ActorViewsAdapter
 import ru.petrgostev.myfirstproject.data.Movie
@@ -43,17 +45,38 @@ class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
     private fun setupViews() {
         val adapter = ActorViewsAdapter()
 
-        with(viewBinding) {
-            this?.ageLimit?.text = requireActivity().getString(R.string.age_limit, movie?.ageLimit)
-            this?.name?.text = movie?.name.orEmpty()
-            this?.category?.text = movie?.category
-            this?.rating?.rating = movie?.rating?: 0.0f
-            this?.reviewsQuantity?.text = requireActivity().getString(R.string.reviews_quantity, movie?.reviewsQuantity)
-            this?.actorsRecycler?.adapter = adapter
+        val genresList: List<String> = movie?.genres?.map { it.name } ?: emptyList()
+
+        with(viewBinding ?: return) {
+            minimumAge.text =
+                requireActivity().getString(R.string.age_limit, movie?.minimumAge)
+            title.text = movie?.title.orEmpty()
+            this.genres.text = genresList.joinToString()
+            rating.rating = movie?.rating_5 ?: 0.0f
+            reviewsQuantity.text =
+                requireActivity().getString(R.string.reviews_quantity, movie?.numberOfRatings)
+            storylineText.text = movie?.overview
+
+            if (movie?.actors != null && movie?.actors?.isEmpty() == false) {
+                actorTitle.visibility = View.VISIBLE
+            } else {
+                actorTitle.visibility = View.GONE
+            }
+
+            actorsRecycler.adapter = adapter
+
             adapter.submitList(movie?.actors)
-            this?.backButton?.setOnClickListener {
+
+            backButton.setOnClickListener {
                 requireActivity().onBackPressed()
             }
+
+            Glide.with(requireContext())
+                .load(movie?.backdrop)
+                .apply(
+                    RequestOptions()
+                        .fallback(R.drawable.poster_none)
+                )
         }
     }
 }
