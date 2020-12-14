@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.MoviesList.adapter
+package ru.petrgostev.myfirstproject.moviesList.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 import ru.petrgostev.myfirstproject.data.Movie

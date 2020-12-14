@@ -16,4 +16,7 @@ data class Movie(
     val runtime: Int,
     val genres: List<Genre>,
     val actors: List<Actor>
-) : Parcelable
+) : Parcelable {
+    val rating_5: Float
+        get() = ratings / 2
+}

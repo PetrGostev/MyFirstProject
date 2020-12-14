@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.MoviesList
+package ru.petrgostev.myfirstproject.moviesList
 
 import android.content.Context
 import android.os.Bundle
@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import kotlinx.coroutines.*
 import ru.petrgostev.myfirstproject.MainActivityInterface
 import ru.petrgostev.myfirstproject.R
-import ru.petrgostev.myfirstproject.MoviesList.adapter.MovieViewsAdapter
+import ru.petrgostev.myfirstproject.moviesList.adapter.MovieViewsAdapter
 import ru.petrgostev.myfirstproject.data.Movie
 import ru.petrgostev.myfirstproject.data.loadMovies
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesListBinding

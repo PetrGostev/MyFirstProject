@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.MoviesList.adapter
+package ru.petrgostev.myfirstproject.moviesList.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

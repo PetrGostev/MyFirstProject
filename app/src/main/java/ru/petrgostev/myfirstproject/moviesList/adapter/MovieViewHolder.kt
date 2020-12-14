@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.MoviesList.adapter
+package ru.petrgostev.myfirstproject.moviesList.adapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -28,16 +28,13 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             R.drawable.vector_no_like
         }
 
-        val genres = arrayListOf<String>()
-        movie.genres.forEach { i ->
-            genres.add(i.name)
-        }
+        val genres:List<String> = movie.genres.map { it.name }
 
         with(viewBinding) {
             movieAgeLimit.text = itemView.context.getString(R.string.age_limit, movie.minimumAge)
             movieLike.setImageResource(resId)
             movieGenres.text = genres.joinToString()
-            movieRating.rating = movie.ratings.div(2) // диапазон 0..10 делим на 5-звездочный рейтинг, получаем 2
+            movieRating.rating = movie.rating_5
             movieReviewsQuantity.text =
                 itemView.context.getString(R.string.reviews_quantity, movie.numberOfRatings)
             movieTitle.text = movie.title

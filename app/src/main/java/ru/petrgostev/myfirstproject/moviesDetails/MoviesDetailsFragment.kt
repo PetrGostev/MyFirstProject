@@ -6,7 +6,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import ru.petrgostev.myfirstproject.MoviesList.adapter.MovieViewHolder
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.moviesDetails.adapter.ActorViewsAdapter
 import ru.petrgostev.myfirstproject.data.Movie
@@ -46,30 +45,29 @@ class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
     private fun setupViews() {
         val adapter = ActorViewsAdapter()
 
-        val genres = arrayListOf<String>()
-        movie?.genres?.forEach { i ->
-            genres.add(i.name)
-        }
+        val genresList: List<String> = movie?.genres?.map { it.name } ?: emptyList()
 
-        with(viewBinding) {
-            this?.minimumAge?.text = requireActivity().getString(R.string.age_limit, movie?.minimumAge)
-            this?.title?.text = movie?.title.orEmpty()
-            this?.genres?.text = genres.joinToString()
-            this?.rating?.rating = movie?.ratings?.div(2) ?: 0.0f
-            this?.reviewsQuantity?.text = requireActivity().getString(R.string.reviews_quantity, movie?.numberOfRatings)
-            this?.storylineText?.text = movie?.overview
+        with(viewBinding ?: return) {
+            minimumAge.text =
+                requireActivity().getString(R.string.age_limit, movie?.minimumAge)
+            title.text = movie?.title.orEmpty()
+            this.genres.text = genresList.joinToString()
+            rating.rating = movie?.rating_5 ?: 0.0f
+            reviewsQuantity.text =
+                requireActivity().getString(R.string.reviews_quantity, movie?.numberOfRatings)
+            storylineText.text = movie?.overview
 
             if (movie?.actors != null && movie?.actors?.isEmpty() == false) {
-                this?.actorTitle?.visibility = View.VISIBLE
+                actorTitle.visibility = View.VISIBLE
             } else {
-                this?.actorTitle?.visibility = View.GONE
+                actorTitle.visibility = View.GONE
             }
 
-            this?.actorsRecycler?.adapter = adapter
+            actorsRecycler.adapter = adapter
 
             adapter.submitList(movie?.actors)
 
-            this?.backButton?.setOnClickListener {
+            backButton.setOnClickListener {
                 requireActivity().onBackPressed()
             }
 
@@ -77,9 +75,8 @@ class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
                 .load(movie?.backdrop)
                 .apply(
                     RequestOptions()
-                    .fallback(R.drawable.poster_none)
+                        .fallback(R.drawable.poster_none)
                 )
-                .into(this?.image)
         }
     }
 }

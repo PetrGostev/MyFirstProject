@@ -2,7 +2,7 @@ package ru.petrgostev.myfirstproject
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import ru.petrgostev.myfirstproject.MoviesList.MoviesListFragment
+import ru.petrgostev.myfirstproject.moviesList.MoviesListFragment
 import ru.petrgostev.myfirstproject.data.Movie
 import ru.petrgostev.myfirstproject.moviesDetails.MoviesDetailsFragment
 
