@@ -2,7 +2,7 @@ package ru.petrgostev.myfirstproject.moviesList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import ru.petrgostev.myfirstproject.data.jsоson.MoviesGetOutput
+import ru.petrgostev.myfirstproject.data.jsоn.MoviesGetOutput
 
 class MoviesListViewModelFactory(private val moviesGetOutput: MoviesGetOutput) : ViewModelProvider.Factory {
 

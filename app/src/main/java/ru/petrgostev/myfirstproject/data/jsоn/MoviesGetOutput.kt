@@ -1,8 +1,7 @@
-package ru.petrgostev.myfirstproject.data.jsоson
+package ru.petrgostev.myfirstproject.data.jsоn
 
 import ru.petrgostev.myfirstproject.data.Movie
 
 interface MoviesGetOutput {
-    suspend fun getMovies(): List<Movie>
-
+    suspend operator fun invoke(): List<Movie>
 }

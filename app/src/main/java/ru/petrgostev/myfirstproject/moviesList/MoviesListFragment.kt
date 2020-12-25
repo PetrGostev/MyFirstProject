@@ -8,23 +8,25 @@ import ru.petrgostev.myfirstproject.Router
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.moviesList.adapter.MovieViewsAdapter
 import ru.petrgostev.myfirstproject.data.Movie
-import ru.petrgostev.myfirstproject.data.jsоson.MoviesGet
-import ru.petrgostev.myfirstproject.data.jsоson.MoviesGetOutput
+import ru.petrgostev.myfirstproject.data.jsоn.MoviesGet
+import ru.petrgostev.myfirstproject.data.jsоn.MoviesGetOutput
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesListBinding
 
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private val parentRouter: Router? get() = (activity as? Router)
-    private val moviesGetOutput: MoviesGetOutput get() = (MoviesGet(requireContext()))
 
     private val viewModel: MoviesListViewModel by viewModels {
         MoviesListViewModelFactory(
-            moviesGetOutput
+            MoviesGet(requireContext())
         )
     }
 
     private var viewBinding: FragmentMoviesListBinding? = null
-    private lateinit var adapter: MovieViewsAdapter
+
+    private val adapter: MovieViewsAdapter by lazy { MovieViewsAdapter { movie: Movie ->
+        parentRouter?.openMoviesDetailsFragment(movie)
+    }}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,9 +48,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private fun initViews(view: View) {
         viewBinding = FragmentMoviesListBinding.bind(view)
-        adapter = MovieViewsAdapter { movie: Movie ->
-            parentRouter?.openMoviesDetailsFragment(movie)
-        }
+
         viewBinding?.moviesRecycler?.adapter = adapter
     }
 

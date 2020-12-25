@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.petrgostev.myfirstproject.data.Movie
-import ru.petrgostev.myfirstproject.data.jsоson.MoviesGetOutput
+import ru.petrgostev.myfirstproject.data.jsоn.MoviesGetOutput
 
 class MoviesListViewModel(private val moviesGetOutput: MoviesGetOutput) : ViewModel() {
 
@@ -16,7 +16,7 @@ class MoviesListViewModel(private val moviesGetOutput: MoviesGetOutput) : ViewMo
 
     fun loadMovies() {
         viewModelScope.launch {
-            val moviesResult = moviesGetOutput.getMovies()
+            val moviesResult: List<Movie> = moviesGetOutput()
             _mutableMoviesList.setValue(moviesResult)
         }
     }

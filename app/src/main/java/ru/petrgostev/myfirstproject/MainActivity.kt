@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity(), Router {
     override fun openMoviesDetailsFragment(movie: Movie) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fame, MoviesDetailsFragment.newInstance(movie))
-            .addToBackStack("MoviesDetailsFragment")
+            .addToBackStack(MoviesDetailsFragment::class.java.name)
             .commit()
     }
 }
