@@ -1,47 +1,44 @@
 package ru.petrgostev.myfirstproject.moviesList
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import kotlinx.coroutines.*
-import ru.petrgostev.myfirstproject.MainActivityInterface
+import androidx.fragment.app.viewModels
+import ru.petrgostev.myfirstproject.Router
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.moviesList.adapter.MovieViewsAdapter
 import ru.petrgostev.myfirstproject.data.Movie
-import ru.petrgostev.myfirstproject.data.loadMovies
+import ru.petrgostev.myfirstproject.data.jsоn.MoviesGet
+import ru.petrgostev.myfirstproject.data.jsоn.MoviesGetOutput
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesListBinding
 
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
-    private var mainActivityInterface: MainActivityInterface? = null
-    private var viewBinding: FragmentMoviesListBinding? = null
-    private lateinit var adapter: MovieViewsAdapter
+    private val parentRouter: Router? get() = (activity as? Router)
 
-    private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, exception ->
-        println("CoroutineExceptionHandler got $exception in $coroutineContext")
+    private val viewModel: MoviesListViewModel by viewModels {
+        MoviesListViewModelFactory(
+            MoviesGet(requireContext())
+        )
     }
 
-    private var scope = CoroutineScope(SupervisorJob() + Dispatchers.Main + exceptionHandler)
+    private var viewBinding: FragmentMoviesListBinding? = null
+
+    private val adapter: MovieViewsAdapter by lazy { MovieViewsAdapter { movie: Movie ->
+        parentRouter?.openMoviesDetailsFragment(movie)
+    }}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewBinding = FragmentMoviesListBinding.bind(view)
 
-        adapter = MovieViewsAdapter { movie: Movie ->
-            mainActivityInterface?.onShowMoviesDetailsFragment(movie)
-        }
-        viewBinding?.moviesRecycler?.adapter = adapter
-    }
+        initViews(view)
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivityInterface = context as? MainActivityInterface
+        viewModel.moviesList.observe(this.viewLifecycleOwner, this::updateAdapter)
     }
 
     override fun onStart() {
         super.onStart()
-        scope.launch { updateMovies() }
+        viewModel.loadMovies()
     }
 
     override fun onDestroyView() {
@@ -49,10 +46,13 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         viewBinding = null
     }
 
-    private suspend fun updateMovies() {
-        val movies: List<Movie> = scope.async {
-            loadMovies(requireContext())
-        }.await()
+    private fun initViews(view: View) {
+        viewBinding = FragmentMoviesListBinding.bind(view)
+
+        viewBinding?.moviesRecycler?.adapter = adapter
+    }
+
+    private fun updateAdapter(movies: List<Movie>) {
         adapter.submitList(movies)
     }
 }
