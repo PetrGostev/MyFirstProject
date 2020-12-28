@@ -13,10 +13,14 @@ class MainActivity : AppCompatActivity(), Router {
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fame, MoviesListFragment())
-                .commit()
+            openMoviesListFragmentt()
         }
+    }
+
+    override fun openMoviesListFragmentt() {
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fame, MoviesListFragment())
+            .commit()
     }
 
     override fun openMoviesDetailsFragment(movie: Movie) {

@@ -16,12 +16,10 @@ class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
     companion object {
         private const val ARG_MOVIE = "movie"
 
-        fun newInstance(movie: Movie): MoviesDetailsFragment {
-            return MoviesDetailsFragment().apply {
-                arguments = bundleOf(
-                    ARG_MOVIE to movie
-                )
-            }
+        fun newInstance(movie: Movie): MoviesDetailsFragment = MoviesDetailsFragment().apply {
+            arguments = bundleOf(
+                ARG_MOVIE to movie
+            )
         }
     }
 
@@ -32,7 +30,7 @@ class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
         super.onViewCreated(view, savedInstanceState)
 
         viewBinding = FragmentMoviesDetailsBinding.bind(view)
-        movie = arguments?.getParcelable(ARG_MOVIE)
+        movie = requireArguments().getParcelable(ARG_MOVIE)
 
         setupViews()
     }

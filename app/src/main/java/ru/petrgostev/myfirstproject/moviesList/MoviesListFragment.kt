@@ -14,7 +14,7 @@ import ru.petrgostev.myfirstproject.databinding.FragmentMoviesListBinding
 
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
-    private val parentRouter: Router? get() = (activity as? Router)
+    private val parentRouter: Router? by lazy { activity as? Router }
 
     private val viewModel: MoviesListViewModel by viewModels {
         MoviesListViewModelFactory(
