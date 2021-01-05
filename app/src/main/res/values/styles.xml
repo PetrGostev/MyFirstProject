@@ -19,4 +19,13 @@
         <item name="android:text">@string/text_back</item>
     </style>
 
+    <style name="Spinner" parent="Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:paddingStart">0dp</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:background">@color/colorBackground</item>
+<!--        <item name="android:dropDownSelector">@drawable/vector_triangle</item>-->
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

@@ -3,7 +3,6 @@ package ru.petrgostev.myfirstproject
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import ru.petrgostev.myfirstproject.moviesList.MoviesListFragment
-import ru.petrgostev.myfirstproject.data.Movie
 import ru.petrgostev.myfirstproject.moviesDetails.MoviesDetailsFragment
 
 class MainActivity : AppCompatActivity(), Router {
@@ -13,19 +12,19 @@ class MainActivity : AppCompatActivity(), Router {
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
-            openMoviesListFragmentt()
+            openMoviesListFragment()
         }
     }
 
-    override fun openMoviesListFragmentt() {
+    private fun openMoviesListFragment() {
         supportFragmentManager.beginTransaction()
             .add(R.id.fame, MoviesListFragment())
             .commit()
     }
 
-    override fun openMoviesDetailsFragment(movie: Movie) {
+    override fun openMoviesDetailsFragment(movieId: Int) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fame, MoviesDetailsFragment.newInstance(movie))
+            .replace(R.id.fame, MoviesDetailsFragment.newInstance(movieId))
             .addToBackStack(MoviesDetailsFragment::class.java.name)
             .commit()
     }

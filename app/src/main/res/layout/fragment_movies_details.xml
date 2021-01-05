@@ -25,13 +25,12 @@
             android:foreground="@drawable/vector_mask"
             android:scaleType="centerCrop"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/orig"
             tools:ignore="ContentDescription,UnusedAttribute" />
 
         <Button
             android:id="@+id/back_button"
             style="@style/Button.Back"
-            android:layout_marginStart="2dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="50dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -43,7 +42,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="140dp"
             android:background="@drawable/vector_rectangle"
-            android:elevation="1dp"
             android:gravity="center"
             android:textColor="@color/colorWhite"
             android:textSize="12sp"
@@ -88,7 +86,6 @@
             app:layout_constraintStart_toStartOf="@+id/title"
             app:layout_constraintTop_toBottomOf="@+id/genres"
             app:numStars="5"
-            app:rating="3.8"
             app:spacing="2dp"
             app:step="0.1" />
 
@@ -114,6 +111,7 @@
             android:textColor="@color/colorWhite"
             android:textSize="14sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/rating"
             app:layout_constraintTop_toBottomOf="@+id/reviews_quantity" />
 
@@ -122,7 +120,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@string/after_the_devastating_events_of_avengers_infinity_war_the_universe_is_in_ruins_with_the_help_of_remaining_allies_the_avengers_assemble_once_more_in_order_to_reverse_thanos_actions_and_restore_balance_to_the_universe"
+            android:layout_marginBottom="12dp"
             android:textColor="@color/colorWhite"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@+id/title"
@@ -133,11 +131,12 @@
             android:id="@+id/actor_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="12dp"
             android:text="@string/cast"
             android:textColor="@color/colorWhite"
             android:textSize="14sp"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/title"
             app:layout_constraintStart_toStartOf="@+id/title"
             app:layout_constraintTop_toBottomOf="@+id/storyline_text" />
@@ -148,6 +147,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
+            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="@+id/title"
             app:layout_constraintStart_toStartOf="@+id/title"
