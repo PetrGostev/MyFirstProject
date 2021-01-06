@@ -6,7 +6,8 @@ import coil.load
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.databinding.ViewHolderMovieBinding
 import ru.petrgostev.myfirstproject.network.pojo.MoviesItem
-import ru.petrgostev.myfirstproject.utils.ImageBaseUrl
+import ru.petrgostev.myfirstproject.utils.ImagesBaseUrl
+import ru.petrgostev.myfirstproject.utils.PosterSizeEnum
 
 class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -14,19 +15,20 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun onBind(moviesItem: MoviesItem) {
 
-        viewBinding.movieImagePoster.load(ImageBaseUrl.IMAGE_BASE_URL + moviesItem.posterPath) {
-            crossfade(true)
+        viewBinding.movieImagePoster.load(ImagesBaseUrl.IMAGES_BASE_URL + PosterSizeEnum.W300.size + moviesItem.posterPath) {
+            crossfade(false)
             error(R.drawable.poster_none)
         }
 
         with(viewBinding) {
-            movieAgeLimit.text = itemView.context.getString(R.string.age_limit, moviesItem.minimumAge)
-//            movieLike.setImageResource(resId)
+            movieAgeLimit.text =
+                itemView.context.getString(R.string.age_limit, moviesItem.minimumAge)
+            //TODO 01: movieLike.setImageResource(resId)
             movieGenres.text = moviesItem.genre.toString()
             movieRating.rating = moviesItem.rating_5
-            movieReviewsQuantity.text = itemView.context.getString(R.string.reviews_quantity, moviesItem.voteCount)
+            movieReviewsQuantity.text =
+                itemView.context.getString(R.string.reviews_quantity, moviesItem.voteCount)
             movieTitle.text = moviesItem.title
-//            movieRuntime.text = itemView.context.getString(R.string.runtime_text, movie.runtime)
         }
     }
 }

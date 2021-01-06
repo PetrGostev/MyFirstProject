@@ -2,10 +2,11 @@ package ru.petrgostev.myfirstproject.network.pojo
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import ru.petrgostev.myfirstproject.utils.Adult
 import ru.petrgostev.myfirstproject.utils.GenresMap
 
 @Serializable
-data class MoviesResponse(
+class MoviesResponse(
 
     @SerialName("page")
     val page: Int,
@@ -48,7 +49,7 @@ data class MoviesItem(
     val voteCount: Int
 ) {
     val rating_5: Float = (voteAverage / 2).toFloat()
-    val minimumAge: Int = if (adult) 16 else 13
+    val minimumAge: Int = if (adult) Adult.ADULT else Adult.NOT_ADULT
     val genre: () -> String = {
         val genres = mutableListOf<String>()
         genreIds.forEach {

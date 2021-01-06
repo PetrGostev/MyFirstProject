@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection
@@ -14,8 +15,12 @@ import ru.petrgostev.myfirstproject.databinding.FragmentMoviesListBinding
 import ru.petrgostev.myfirstproject.moviesList.adapter.MovieViewsAdapter
 import ru.petrgostev.myfirstproject.network.NetworkRepository
 import ru.petrgostev.myfirstproject.network.pojo.MoviesItem
+import ru.petrgostev.myfirstproject.utils.Category
 import ru.petrgostev.myfirstproject.utils.Connect
 import ru.petrgostev.myfirstproject.utils.ItemOffsetDecoration
+import ru.petrgostev.myfirstproject.utils.ToastUtil
+
+private const val DISTANCE_TRIGGER = 10
 
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
@@ -27,7 +32,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private var viewBinding: FragmentMoviesListBinding? = null
     private var page = 1
-    private var sort = 0
+    private var sort: Category = Category.POPULAR
     private var isRestart = false
 
     private val adapter: MovieViewsAdapter by lazy {
@@ -42,7 +47,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         viewModel.moviesList.observe(
             this.viewLifecycleOwner,
             { if (it.isNotEmpty()) this.updateAdapter(it) })
-        viewModel.isConnected.observe(this.viewLifecycleOwner, this::showNoConnectionToast)
+        viewModel.isConnected.observe(this.viewLifecycleOwner, this::showToastNoConnectionYet)
         viewModel.isLoading.observe(this.viewLifecycleOwner, this::showLoader)
 
         initViews(view)
@@ -79,17 +84,13 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private fun updateAdapter(movieResponses: List<MoviesItem>) {
         adapter.submitList(movieResponses)
-
-        if (page > 1) {
-            adapter.notifyDataSetChanged()
-        }
     }
 
     private fun configureMoviesSwipy() {
         with(viewBinding ?: return) {
 
             moviesSwipy.direction = SwipyRefreshLayoutDirection.BOTH
-            moviesSwipy.setDistanceToTriggerSync(10)
+            moviesSwipy.setDistanceToTriggerSync(DISTANCE_TRIGGER)
 
             moviesSwipy.setOnRefreshListener {
                 when (it) {
@@ -97,16 +98,12 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                     SwipyRefreshLayoutDirection.BOTTOM -> page++
                     else -> page = 1
                 }
-                if (Connect.isConnect(requireContext())) {
+                if (Connect.isConnected) {
                     viewModel.getMovies(page, sort)
                     isRestart = false
                 } else {
                     moviesSwipy.isRefreshing = false
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.no_connecting),
-                        Toast.LENGTH_LONG
-                    ).show()
+                    ToastUtil.showToastNotConnected(requireContext())
                 }
             }
         }
@@ -125,22 +122,18 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                     id: Long
                 ) {
                     when (position) {
-                        0 -> sort = 0
-                        1 -> sort = 1
-                        2 -> sort = 2
+                        0 -> sort = Category.POPULAR
+                        1 -> sort = Category.TOP_RATED
+                        2 -> sort = Category.UPCOMING
                     }
 
                     setSelectionWithoutDispatch(spinner, position)
 
                     page = 1
 
-                    if (!Connect.isConnect(requireContext())) {
+                    if (!Connect.isConnected) {
                         moviesSwipy.isRefreshing = false
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.no_connecting),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        ToastUtil.showToastNotConnected(requireContext())
                         return
                     }
 
@@ -163,18 +156,14 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     private fun showLoader(isLoading: Boolean) {
         with(viewBinding ?: return) {
             moviesSwipy.isRefreshing = false
-            loader.visibility = if (isLoading) View.VISIBLE else View.GONE
+            loader.isVisible = isLoading
         }
     }
 
-    private fun showNoConnectionToast(isConnect: Boolean) {
+    private fun showToastNoConnectionYet(isConnect: Boolean) {
         if (!isConnect) {
             viewBinding?.moviesSwipy?.isRefreshing = false
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.no_connection_yet),
-                Toast.LENGTH_LONG
-            ).show()
+            ToastUtil.showToastNoConnectionYet(requireContext())
         }
     }
 }

@@ -4,14 +4,14 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GenresResponse(
+class GenresResponse(
 
 	@SerialName("genres")
 	val genres: List<GenresItem>
 )
 
 @Serializable
-data class GenresItem(
+class GenresItem(
 
 	@SerialName("name")
 	val name: String,

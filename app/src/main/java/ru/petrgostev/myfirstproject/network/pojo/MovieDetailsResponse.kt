@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MovieDetailsResponse(
+class MovieDetailsResponse(
 
     @SerialName("original_language")
     val originalLanguage: String,
@@ -59,7 +59,7 @@ data class MovieDetailsResponse(
 }
 
 @Serializable
-data class GenresForDetails(
+class GenresForDetails(
 
     @SerialName("name")
     val name: String,

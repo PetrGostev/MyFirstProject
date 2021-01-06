@@ -10,11 +10,14 @@ import kotlinx.coroutines.*
 import ru.petrgostev.myfirstproject.network.NetworkRepository
 import ru.petrgostev.myfirstproject.network.pojo.GenresItem
 import ru.petrgostev.myfirstproject.network.pojo.MoviesItem
+import ru.petrgostev.myfirstproject.utils.Category
 import ru.petrgostev.myfirstproject.utils.GenresMap
+import ru.petrgostev.myfirstproject.utils.ImagesBaseUrl
+import ru.petrgostev.myfirstproject.utils.PosterSizeList
 
 class MoviesListViewModel(private val networkRepository: NetworkRepository) : ViewModel() {
 
-    private val _mutableMoviesList = MutableLiveData<List<MoviesItem>>(emptyList())
+    private var _mutableMoviesList = MutableLiveData<List<MoviesItem>>(emptyList())
     private val _mutableIsConnected = MutableLiveData<Boolean>(true)
     private val _mutableIsLoading = MutableLiveData<Boolean>(true)
 
@@ -32,17 +35,22 @@ class MoviesListViewModel(private val networkRepository: NetworkRepository) : Vi
         }
     }
 
-    var movieResponses: ArrayList<MoviesItem> = arrayListOf()
-
-    fun getMovies(page: Int, sort: Int) {
+    fun getMovies(page: Int, sort: Category) {
         viewModelScope.launch(exceptionHandler) {
-            loadGenresAndMovies(page, sort)
+            loadConfigurationAndGenresAndMovies(page, sort)
         }
     }
 
-    private suspend fun loadGenresAndMovies(page: Int, sort: Int) {
+    private suspend fun loadConfigurationAndGenresAndMovies(page: Int, sort: Category) {
+        loadConfiguration()
         loadGenres()
         loadMovies(page, sort)
+    }
+
+    private suspend fun loadConfiguration() {
+        val images = networkRepository.getImages()
+        ImagesBaseUrl.IMAGES_BASE_URL = images.secureBaseUrl
+        PosterSizeList.posterSizes = images.posterSizes
     }
 
     private suspend fun loadGenres() {
@@ -54,15 +62,17 @@ class MoviesListViewModel(private val networkRepository: NetworkRepository) : Vi
         }
     }
 
-    private suspend fun loadMovies(page: Int, sort: Int) {
+    private suspend fun loadMovies(page: Int, sort: Category) {
         if (page == 1) {
-            movieResponses = arrayListOf()
+            _mutableMoviesList.value = emptyList()
         }
 
         if (page < totalPages || totalPages == 0) {
             val moviesResponse = networkRepository.getMovies(page, sort)
-            movieResponses.addAll(moviesResponse.movieResponses)
-            _mutableMoviesList.postValue(movieResponses)
+
+            val updatedMoviesList =
+                _mutableMoviesList.value?.plus(moviesResponse.movieResponses).orEmpty()
+            _mutableMoviesList.postValue(updatedMoviesList)
             _mutableIsConnected.postValue(true)
             _mutableIsLoading.postValue(false)
 
