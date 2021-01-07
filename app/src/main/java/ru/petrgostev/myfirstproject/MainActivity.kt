@@ -1,17 +1,16 @@
 package ru.petrgostev.myfirstproject
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import ru.petrgostev.myfirstproject.moviesList.MoviesListFragment
+import android.os.PersistableBundle
+import androidx.appcompat.app.AppCompatActivity
 import ru.petrgostev.myfirstproject.moviesDetails.MoviesDetailsFragment
-import ru.petrgostev.myfirstproject.utils.Connect
-import ru.petrgostev.myfirstproject.utils.ConnectionType
-import ru.petrgostev.myfirstproject.utils.NetworkMonitorUtil
-import ru.petrgostev.myfirstproject.utils.ToastUtil
+import ru.petrgostev.myfirstproject.moviesList.MoviesListFragment
+import ru.petrgostev.myfirstproject.utils.*
 
 class MainActivity : AppCompatActivity(), Router {
 
     private val networkMonitor = NetworkMonitorUtil(this)
+    private var bundle: Bundle? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,9 +18,9 @@ class MainActivity : AppCompatActivity(), Router {
 
         initNetworkMonitor()
 
-        if (savedInstanceState == null) {
-            openMoviesListFragment()
-        }
+        bundle = savedInstanceState
+
+        openMoviesListFragment()
     }
 
     override fun onResume() {
@@ -47,9 +46,11 @@ class MainActivity : AppCompatActivity(), Router {
     }
 
     private fun openMoviesListFragment() {
-        supportFragmentManager.beginTransaction()
-            .add(R.id.fame, MoviesListFragment())
-            .commit()
+        if (bundle == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fame, MoviesListFragment())
+                .commit()
+        }
     }
 
     private fun initNetworkMonitor() {

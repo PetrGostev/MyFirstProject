@@ -15,10 +15,7 @@ import ru.petrgostev.myfirstproject.databinding.FragmentMoviesListBinding
 import ru.petrgostev.myfirstproject.moviesList.adapter.MovieViewsAdapter
 import ru.petrgostev.myfirstproject.network.NetworkRepository
 import ru.petrgostev.myfirstproject.network.pojo.MoviesItem
-import ru.petrgostev.myfirstproject.utils.Category
-import ru.petrgostev.myfirstproject.utils.Connect
-import ru.petrgostev.myfirstproject.utils.ItemOffsetDecoration
-import ru.petrgostev.myfirstproject.utils.ToastUtil
+import ru.petrgostev.myfirstproject.utils.*
 
 private const val DISTANCE_TRIGGER = 10
 
@@ -53,14 +50,14 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         initViews(view)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewBinding = null
-    }
-
     override fun onPause() {
         super.onPause()
         isRestart = true
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewBinding = null
     }
 
     private fun initViews(view: View) {
