@@ -2,6 +2,7 @@ package ru.petrgostev.myfirstproject.network.pojo
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import ru.petrgostev.myfirstproject.utils.Adult
 
 @Serializable
 class MovieDetailsResponse(
@@ -55,7 +56,7 @@ class MovieDetailsResponse(
     val status: String
 ) {
     val rating_5: Float = (voteAverage / 2).toFloat()
-    val minimumAge: Int = if (adult) 16 else 13
+    val minimumAge: Int = if (adult) Adult.ADULT else Adult.NOT_ADULT
 }
 
 @Serializable

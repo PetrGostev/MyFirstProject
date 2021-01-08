@@ -14,7 +14,7 @@
 
     <string-array name="spinner_items">
         <item>popular</item>
-        <item>top rated</item>
+        <item>rated</item>
         <item>upcoming</item>
     </string-array>
 </resources>

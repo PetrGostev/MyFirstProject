@@ -20,8 +20,8 @@
         android:id="@+id/badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginStart="@dimen/space_2x"
+        android:layout_marginTop="@dimen/space_7x"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/vector_badge"
@@ -31,20 +31,32 @@
         android:id="@+id/spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:background="@color/colorBackground"
         android:entries="@array/spinner_items"
+        android:paddingEnd="@dimen/space_3_5x"
         android:theme="@style/Spinner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="@+id/textView"
+        tools:ignore="RtlSymmetry" />
+
+    <ImageView
+        android:id="@+id/spinner_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/space_2_5x"
+        android:layout_marginBottom="@dimen/space_0_5x"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/vector_down_arrow" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/space_1x"
         android:text="@string/movies_list"
         android:textColor="@color/colorWhite"
-        android:textSize="14sp"
+        android:textSize="@dimen/text_size_1_75x"
         app:layout_constraintBottom_toBottomOf="@+id/badge"
         app:layout_constraintStart_toEndOf="@+id/badge"
         app:layout_constraintTop_toTopOf="@+id/badge" />
@@ -54,11 +66,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="@dimen/space_2x"
+        android:layout_marginTop="@dimen/space_3x"
+        android:layout_marginEnd="@dimen/space_2x"
         android:orientation="vertical"
-        android:paddingBottom="100dp"
+        android:paddingBottom="@dimen/space_12_5x"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
