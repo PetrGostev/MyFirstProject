@@ -15,7 +15,7 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun onBind(moviesItem: MoviesItem) {
 
-        viewBinding.movieImagePoster.load(ImagesBaseUrl.IMAGES_BASE_URL + PosterSizeEnum.W300.size + moviesItem.posterPath) {
+        viewBinding.movieImagePoster.load(ImagesBaseUrl.IMAGES_BASE_URL + PosterSizeEnum.W500.size + moviesItem.posterPath) {
             crossfade(false)
             error(R.drawable.poster_none)
         }

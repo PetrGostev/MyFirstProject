@@ -66,17 +66,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         configureMoviesSwipy()
         configureSpinner()
 
-        with(viewBinding ?: return) {
-
-            moviesRecycler.addItemDecoration(
-                ItemOffsetDecoration(
-                    context = requireContext(),
-                    R.dimen.item_offset
-                )
-            )
-
-            moviesRecycler.adapter = adapter
-        }
+        viewBinding?.moviesRecycler?.adapter = adapter
     }
 
     private fun updateAdapter(movieResponses: List<MoviesItem>) {
