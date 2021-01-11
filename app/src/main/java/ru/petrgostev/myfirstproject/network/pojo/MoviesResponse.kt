@@ -15,44 +15,44 @@ class MoviesResponse(
     val totalPages: Int,
 
     @SerialName("results")
-    val movieResponses: List<MoviesItem>,
+    var movieResponses: List<MoviesItem> = emptyList(),
 )
 
 @Serializable
 data class MoviesItem(
 
     @SerialName("overview")
-    val overview: String,
+    val overview: String?,
 
     @SerialName("title")
-    val title: String,
+    val title: String?,
 
     @SerialName("genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>?,
 
     @SerialName("poster_path")
-    val posterPath: String,
+    val posterPath: String?,
 
     @SerialName("popularity")
-    val popularity: Double,
+    val popularity: Double?,
 
     @SerialName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Double = 0.0,
 
     @SerialName("id")
-    val id: Int,
+    val id: Int?,
 
     @SerialName("adult")
     val adult: Boolean,
 
     @SerialName("vote_count")
-    val voteCount: Int
+    val voteCount: Int?
 ) {
     val rating_5: Float = (voteAverage / 2).toFloat()
     val minimumAge: Int = if (adult) Adult.ADULT else Adult.NOT_ADULT
     val genre: () -> String = {
         val genres = mutableListOf<String>()
-        genreIds.forEach {
+        genreIds?.forEach {
             genres.add(GenresMap.genres.getValue(it))
         }
         genres.joinToString()

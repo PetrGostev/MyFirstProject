@@ -17,3 +17,7 @@ object Adult{
     const val ADULT= 18
     const val NOT_ADULT= 0
 }
+
+object PageSize{
+    const val PAGE_SIZE = 50
+}

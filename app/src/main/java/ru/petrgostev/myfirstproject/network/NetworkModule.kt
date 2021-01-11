@@ -15,11 +15,6 @@ import ru.petrgostev.myfirstproject.utils.ApiKey
 import ru.petrgostev.myfirstproject.utils.BaseUrl
 import java.util.concurrent.TimeUnit
 
-private const val API_KEY = "api_key"
-private const val READ_TIMEOUT: Long = 20
-private const val WRITE_TIMEOUT: Long = 20
-private const val CONNECT_TIMEOUT: Long = 10
-
 class NetworkModule {
 
     private val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
@@ -30,7 +25,7 @@ class NetworkModule {
         val url = chain.request()
             .url
             .newBuilder()
-            .addQueryParameter(API_KEY, ApiKey.API_KEY)
+            .addQueryParameter(Companion.API_KEY, ApiKey.API_KEY)
             .build()
 
         val newRequest = chain.request()
@@ -66,4 +61,11 @@ class NetworkModule {
     val genreApi: GenreApi = retrofit.create()
     val moviesApi: MoviesApi = retrofit.create()
     val configurationApi: ConfigurationApi = retrofit.create()
+
+    companion object {
+        private const val API_KEY = "api_key"
+        private const val READ_TIMEOUT: Long = 20
+        private const val WRITE_TIMEOUT: Long = 20
+        private const val CONNECT_TIMEOUT: Long = 10
+    }
 }

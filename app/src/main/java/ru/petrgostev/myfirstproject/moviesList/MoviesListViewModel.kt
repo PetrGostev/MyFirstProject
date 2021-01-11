@@ -6,7 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import ru.petrgostev.myfirstproject.network.NetworkRepository
 import ru.petrgostev.myfirstproject.network.pojo.GenresItem
 import ru.petrgostev.myfirstproject.network.pojo.MoviesItem
@@ -17,16 +20,13 @@ import ru.petrgostev.myfirstproject.utils.PosterSizeList
 
 class MoviesListViewModel(private val networkRepository: NetworkRepository) : ViewModel() {
 
-    private var _mutableMoviesList = MutableLiveData<List<MoviesItem>>(emptyList())
     private val _mutableIsConnected = MutableLiveData<Boolean>(true)
-    private val _mutableIsLoading = MutableLiveData<Boolean>(true)
 
-    val moviesList: LiveData<List<MoviesItem>> get() = _mutableMoviesList
     val isConnected: LiveData<Boolean> get() = _mutableIsConnected
-    val isLoading: LiveData<Boolean> get() = _mutableIsLoading
 
     private val genres = GenresMap.genres
-    private var totalPages = 0
+    private var sort: Category = Category.POPULAR
+    private var moviesResult: Flow<PagingData<MoviesItem>>? = null
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         Log.e(TAG, "Coroutine exception, scope active:${viewModelScope.isActive}", throwable)
@@ -35,16 +35,15 @@ class MoviesListViewModel(private val networkRepository: NetworkRepository) : Vi
         }
     }
 
-    fun getMovies(page: Int, sort: Category) {
+    fun getConfiguration() {
         viewModelScope.launch(exceptionHandler) {
-            loadConfigurationAndGenresAndMovies(page, sort)
+            loadConfigurationAndGenresAndMovies()
         }
     }
 
-    private suspend fun loadConfigurationAndGenresAndMovies(page: Int, sort: Category) {
+    private suspend fun loadConfigurationAndGenresAndMovies() {
         loadConfiguration()
         loadGenres()
-        loadMovies(page, sort)
     }
 
     private suspend fun loadConfiguration() {
@@ -62,21 +61,18 @@ class MoviesListViewModel(private val networkRepository: NetworkRepository) : Vi
         }
     }
 
-    private suspend fun loadMovies(page: Int, sort: Category) {
-        if (page == 1) {
-            _mutableMoviesList.value = emptyList()
+    fun loadMovies(sort: Category, isRefresh: Boolean): Flow<PagingData<MoviesItem>> {
+        val lastResult = moviesResult
+        if (lastResult != null && this.sort == sort && !isRefresh) {
+            return lastResult
         }
 
-        if (page < totalPages || totalPages == 0) {
-            val moviesResponse = networkRepository.getMovies(page, sort)
+        val newResult: Flow<PagingData<MoviesItem>> = networkRepository.getMovies(sort)
+            .cachedIn(viewModelScope)
 
-            val updatedMoviesList =
-                _mutableMoviesList.value?.plus(moviesResponse.movieResponses).orEmpty()
-            _mutableMoviesList.postValue(updatedMoviesList)
-            _mutableIsConnected.postValue(true)
-            _mutableIsLoading.postValue(false)
-
-            this.totalPages = moviesResponse.totalPages
-        }
+        moviesResult = newResult
+        this.sort = sort
+        _mutableIsConnected.postValue(true)
+        return newResult
     }
 }

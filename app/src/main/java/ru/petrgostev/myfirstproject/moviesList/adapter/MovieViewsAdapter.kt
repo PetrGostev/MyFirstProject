@@ -2,12 +2,13 @@ package ru.petrgostev.myfirstproject.moviesList.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.ListAdapter
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.network.pojo.MoviesItem
 
 class MovieViewsAdapter(private val clickListener: (movieResponse: MoviesItem) -> Unit) :
-    ListAdapter<MoviesItem, MovieViewHolder>(MovieDiffUtilCallback()) {
+    PagingDataAdapter<MoviesItem, MovieViewHolder>(MovieDiffUtilCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         return MovieViewHolder(
@@ -20,9 +21,9 @@ class MovieViewsAdapter(private val clickListener: (movieResponse: MoviesItem) -
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        holder.onBind(getItem(position))
+        getItem(position)?.let { holder.onBind(it) }
         holder.itemView.setOnClickListener {
-            clickListener(getItem(position))
+            getItem(position)?.let { it1 -> clickListener(it1) }
         }
     }
 }

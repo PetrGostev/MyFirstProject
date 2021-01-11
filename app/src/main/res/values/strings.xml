@@ -11,6 +11,7 @@
 
     <string name="no_connection_yet">Соединение еще не установлено! Попробуйте еще раз!</string>
     <string name="no_connecting">Отсутствует интернет соединение!</string>
+    <string name="retry">Retry</string>
 
     <string-array name="spinner_items">
         <item>popular</item>
