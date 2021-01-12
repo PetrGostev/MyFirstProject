@@ -28,7 +28,7 @@ class NetworkModule {
         val url = chain.request()
             .url
             .newBuilder()
-            .addQueryParameter(Companion.API_KEY, ApiKey.API_KEY)
+            .addQueryParameter(API_KEY_NAME, ApiKey.API_KEY_VALUE)
             .build()
 
         val newRequest = chain.request()
@@ -69,7 +69,7 @@ class NetworkModule {
     val configurationApi: ConfigurationApi = retrofit.create()
 
     companion object {
-        private const val API_KEY = "api_key"
+        private const val API_KEY_NAME = "api_key"
         private const val READ_TIMEOUT: Long = 20
         private const val WRITE_TIMEOUT: Long = 20
         private const val CONNECT_TIMEOUT: Long = 10
