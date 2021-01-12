@@ -5,7 +5,7 @@ package ru.petrgostev.myfirstproject.utils
 }
 
 object ApiKey{
-    const val API_KEY= "ab3d7335ac128bcec0b0a8926034daa4"
+    const val API_KEY_VALUE= "ab3d7335ac128bcec0b0a8926034daa4"
 }
 
 object Language{

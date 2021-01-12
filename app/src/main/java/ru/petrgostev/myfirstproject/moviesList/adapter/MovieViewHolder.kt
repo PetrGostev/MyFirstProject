@@ -8,8 +8,6 @@ import coil.load
 import com.aids61517.easyratingview.EasyRatingView
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.network.pojo.MoviesItem
-import ru.petrgostev.myfirstproject.utils.ImagesBaseUrl
-import ru.petrgostev.myfirstproject.utils.PosterSizeEnum
 
 class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -22,18 +20,16 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun onBind(moviesItem: MoviesItem) {
 
-        movieImagePoster.load(ImagesBaseUrl.IMAGES_BASE_URL + PosterSizeEnum.W500.size + moviesItem.posterPath) {
+        movieImagePoster.load(moviesItem.moviePoster) {
             crossfade(false)
             error(R.drawable.poster_none)
         }
 
-        movieAgeLimit.text =
-            itemView.context.getString(R.string.age_limit, moviesItem.minimumAge)
+        movieAgeLimit.text = itemView.context.getString(R.string.age_limit, moviesItem.minimumAge)
         //TODO 01: movieLike.setImageResource(resId)
         movieGenres.text = moviesItem.genre.toString()
         movieRating.rating = moviesItem.rating_5
-        movieReviewsQuantity.text =
-            itemView.context.getString(R.string.reviews_quantity, moviesItem.voteCount)
+        movieReviewsQuantity.text = itemView.context.getString(R.string.reviews_quantity, moviesItem.voteCount)
         movieTitle.text = moviesItem.title
     }
 }

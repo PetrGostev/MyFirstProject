@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.network
+package ru.petrgostev.myfirstproject.network.api
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -10,9 +10,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.create
-import ru.petrgostev.myfirstproject.network.api.ConfigurationApi
-import ru.petrgostev.myfirstproject.network.api.GenreApi
-import ru.petrgostev.myfirstproject.network.api.MoviesApi
 import ru.petrgostev.myfirstproject.utils.ApiKey
 import ru.petrgostev.myfirstproject.utils.BaseUrl
 import java.util.concurrent.TimeUnit

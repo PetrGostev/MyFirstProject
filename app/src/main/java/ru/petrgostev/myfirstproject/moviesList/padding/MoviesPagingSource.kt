@@ -2,16 +2,15 @@ package ru.petrgostev.myfirstproject.moviesList.padding
 
 import androidx.paging.PagingSource
 import retrofit2.HttpException
-import ru.petrgostev.myfirstproject.network.NetworkRepository
+import ru.petrgostev.myfirstproject.network.api.NetworkModule
 import ru.petrgostev.myfirstproject.network.pojo.MoviesItem
-import ru.petrgostev.myfirstproject.network.pojo.MoviesResponse
 import ru.petrgostev.myfirstproject.utils.Category
 import java.io.IOException
 
 private const val STARTING_PAGE = 1
 
 class MoviesPagingSource(
-    private val networkRepository: NetworkRepository,
+    private val networkModule: NetworkModule,
     private val sort: Category
 ) : PagingSource<Int, MoviesItem>() {
 
@@ -20,9 +19,9 @@ class MoviesPagingSource(
         return try {
             val moviesResponse =
             when (sort) {
-            Category.TOP_RATED -> networkRepository.networkModule.moviesApi.getAllTopRating(page = position)
-            Category.UPCOMING -> networkRepository.networkModule.moviesApi.getAllUpcoming(page = position)
-            else -> networkRepository.networkModule.moviesApi.getAllPopular(page = position)
+            Category.TOP_RATED -> networkModule.moviesApi.getAllTopRating(page = position)
+            Category.UPCOMING -> networkModule.moviesApi.getAllUpcoming(page = position)
+            else -> networkModule.moviesApi.getAllPopular(page = position)
         }
             val movies:List<MoviesItem> = moviesResponse.movieResponses
             LoadResult.Page(

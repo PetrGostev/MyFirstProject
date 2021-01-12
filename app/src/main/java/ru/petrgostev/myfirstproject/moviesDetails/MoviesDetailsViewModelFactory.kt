@@ -2,9 +2,9 @@ package ru.petrgostev.myfirstproject.moviesDetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import ru.petrgostev.myfirstproject.network.NetworkRepository
+import ru.petrgostev.myfirstproject.network.repository.NetworkRepositoryInterface
 
-class MoviesDetailsViewModelFactory (private val networkRepository: NetworkRepository) : ViewModelProvider.Factory {
+class MoviesDetailsViewModelFactory(private val networkRepository: NetworkRepositoryInterface) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T = when (modelClass) {

@@ -8,7 +8,5 @@ import ru.petrgostev.myfirstproject.utils.Language
 interface GenreApi {
 
     @GET("genre/movie/list")
-    suspend fun getAll(
-        @Query("language") language: String = Language.LANGUAGE_RU
-    ): GenresResponse
+    suspend fun getAll(@Query("language") language: String = Language.LANGUAGE_RU): GenresResponse
 }

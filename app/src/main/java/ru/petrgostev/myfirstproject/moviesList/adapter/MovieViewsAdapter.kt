@@ -3,7 +3,6 @@ package ru.petrgostev.myfirstproject.moviesList.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.ListAdapter
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.network.pojo.MoviesItem
 
@@ -23,7 +22,7 @@ class MovieViewsAdapter(private val clickListener: (movieResponse: MoviesItem) -
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         getItem(position)?.let { holder.onBind(it) }
         holder.itemView.setOnClickListener {
-            getItem(position)?.let { it1 -> clickListener(it1) }
+            getItem(position)?.let { item -> clickListener(item) }
         }
     }
 }

@@ -3,6 +3,8 @@ package ru.petrgostev.myfirstproject.network.pojo
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import ru.petrgostev.myfirstproject.utils.Adult
+import ru.petrgostev.myfirstproject.utils.ImagesBaseUrl
+import ru.petrgostev.myfirstproject.utils.PosterSizeEnum
 
 @Serializable
 class MovieDetailsResponse(
@@ -55,6 +57,7 @@ class MovieDetailsResponse(
     @SerialName("status")
     val status: String
 ) {
+    val moviePoster:String = ImagesBaseUrl.IMAGES_BASE_URL + PosterSizeEnum.W500.size + posterPath
     val rating_5: Float = (voteAverage / 2).toFloat()
     val minimumAge: Int = if (adult) Adult.ADULT else Adult.NOT_ADULT
 }

@@ -1,7 +1,8 @@
 package ru.petrgostev.myfirstproject
 
 import android.os.Bundle
-import android.os.PersistableBundle
+import android.os.Handler
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import ru.petrgostev.myfirstproject.moviesDetails.MoviesDetailsFragment
 import ru.petrgostev.myfirstproject.moviesList.MoviesListFragment
@@ -10,7 +11,6 @@ import ru.petrgostev.myfirstproject.utils.*
 class MainActivity : AppCompatActivity(), Router {
 
     private val networkMonitor = NetworkMonitorUtil(this)
-    private var bundle: Bundle? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,9 +18,9 @@ class MainActivity : AppCompatActivity(), Router {
 
         initNetworkMonitor()
 
-        bundle = savedInstanceState
-
-        openMoviesListFragment()
+        if (savedInstanceState == null) {
+            openMoviesListFragment()
+        }
     }
 
     override fun onResume() {
@@ -46,11 +46,16 @@ class MainActivity : AppCompatActivity(), Router {
     }
 
     private fun openMoviesListFragment() {
-        if (bundle == null) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fame, MoviesListFragment())
-                .commit()
-        }
+        // Делаем задержку, чтобы успело провериться подключение
+        Handler().postDelayed({
+            if (Connect.isConnected) {
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.fame, MoviesListFragment())
+                    .commit()
+            } else {
+                showNetworkErrorDialog()
+            }
+        }, DURATION)
     }
 
     private fun initNetworkMonitor() {
@@ -61,22 +66,28 @@ class MainActivity : AppCompatActivity(), Router {
                         when (type) {
                             ConnectionType.Wifi -> {
                                 Connect.isConnected = true
-                                openMoviesListFragment()
                             }
                             ConnectionType.Cellular -> {
                                 Connect.isConnected = true
-                                openMoviesListFragment()
                             }
-                            else -> {
-                            }
+                            else -> Unit
                         }
                     }
                     false -> {
                         Connect.isConnected = false
-                        ToastUtil.showToastNotConnected(this)
                     }
                 }
             }
         }
+    }
+
+    private fun showNetworkErrorDialog() = AlertDialog.Builder(this)
+        .setTitle(getString(R.string.no_connecting))
+        .setPositiveButton(getString(R.string.restart_text)) { dialog, which -> openMoviesListFragment() }
+        .setNegativeButton(getString(R.string.cancel_text)) { dialog, which -> finish() }
+        .create().show()
+
+    companion object {
+        private const val DURATION:Long = 200
     }
 }

@@ -2,27 +2,27 @@ package ru.petrgostev.myfirstproject.moviesList
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import ru.petrgostev.myfirstproject.network.NetworkRepository
+import kotlinx.coroutines.flow.collectLatest
 import ru.petrgostev.myfirstproject.network.pojo.GenresItem
 import ru.petrgostev.myfirstproject.network.pojo.MoviesItem
+import ru.petrgostev.myfirstproject.network.repository.NetworkRepositoryInterface
 import ru.petrgostev.myfirstproject.utils.Category
 import ru.petrgostev.myfirstproject.utils.GenresMap
 import ru.petrgostev.myfirstproject.utils.ImagesBaseUrl
 import ru.petrgostev.myfirstproject.utils.PosterSizeList
 
-class MoviesListViewModel(private val networkRepository: NetworkRepository) : ViewModel() {
+class MoviesListViewModel(private val networkRepository: NetworkRepositoryInterface) : ViewModel() {
 
     private val _mutableIsConnected = MutableLiveData<Boolean>(true)
+    private val _mutableMoviesPagingList = MutableLiveData<PagingData<MoviesItem>>()
 
     val isConnected: LiveData<Boolean> get() = _mutableIsConnected
+    val moviesPagingList: LiveData<PagingData<MoviesItem>> get() = _mutableMoviesPagingList
 
     private val genres = GenresMap.genres
     private var sort: Category = Category.POPULAR
@@ -61,7 +61,14 @@ class MoviesListViewModel(private val networkRepository: NetworkRepository) : Vi
         }
     }
 
-    fun loadMovies(sort: Category, isRefresh: Boolean): Flow<PagingData<MoviesItem>> {
+    fun getMovies(sort: Category, isRefresh: Boolean) {
+        viewModelScope.launch {
+            loadMovies(sort, isRefresh).collectLatest { _mutableMoviesPagingList.postValue(it) }
+        }
+    }
+
+
+    private fun loadMovies(sort: Category, isRefresh: Boolean): Flow<PagingData<MoviesItem>> {
         val lastResult = moviesResult
         if (lastResult != null && this.sort == sort && !isRefresh) {
             return lastResult

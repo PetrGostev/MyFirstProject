@@ -6,6 +6,5 @@ import ru.petrgostev.myfirstproject.network.pojo.ConfigurationResponse
 interface ConfigurationApi {
     
     @GET("configuration")
-    suspend fun getConfiguration(
-    ): ConfigurationResponse
+    suspend fun getConfiguration(): ConfigurationResponse
 }

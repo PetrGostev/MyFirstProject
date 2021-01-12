@@ -9,15 +9,17 @@ import androidx.fragment.app.viewModels
 import coil.load
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesDetailsBinding
-import ru.petrgostev.myfirstproject.network.NetworkRepository
+import ru.petrgostev.myfirstproject.di.App
+import ru.petrgostev.myfirstproject.network.repository.NetworkRepository
 import ru.petrgostev.myfirstproject.network.pojo.MovieDetailsResponse
-import ru.petrgostev.myfirstproject.utils.ImagesBaseUrl
-import ru.petrgostev.myfirstproject.utils.PosterSizeEnum
+import ru.petrgostev.myfirstproject.network.repository.NetworkRepositoryInterface
 
 class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
 
+    private val networkRepository: NetworkRepositoryInterface by lazy { NetworkRepository(App.component.getNetworkModule())}
+
     private val viewModel: MoviesDetailsViewModel by viewModels {
-        MoviesDetailsViewModelFactory(NetworkRepository())
+        MoviesDetailsViewModelFactory(networkRepository)
     }
 
     private var viewBinding: FragmentMoviesDetailsBinding? = null
@@ -32,7 +34,7 @@ class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
 
     override fun onStart() {
         super.onStart()
-        requireArguments().getInt(ARG_MOVIE_ID).let { viewModel.loadMovie(it) }
+        viewModel.loadMovie(requireArguments().getInt(ARG_MOVIE_ID))
     }
 
     override fun onDestroyView() {
@@ -45,18 +47,16 @@ class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
 
         with(viewBinding ?: return) {
 
-            image.load(ImagesBaseUrl.IMAGES_BASE_URL + PosterSizeEnum.W500.size + movieDetails.backdropPath) {
+            image.load(movieDetails.moviePoster) {
                 crossfade(true)
                 error(R.drawable.poster_none)
             }
 
-            minimumAge.text =
-                getString(R.string.age_limit, movieDetails.minimumAge)
+            minimumAge.text = getString(R.string.age_limit, movieDetails.minimumAge)
             title.text = movieDetails.title
             this.genres.text = genresList.joinToString()
             rating.rating = movieDetails.rating_5
-            reviewsQuantity.text =
-                getString(R.string.reviews_quantity, movieDetails.voteCount)
+            reviewsQuantity.text = getString(R.string.reviews_quantity, movieDetails.voteCount)
             storylineTitle.isGone = movieDetails.overview.isEmpty()
             storylineText.text = movieDetails.overview
 
