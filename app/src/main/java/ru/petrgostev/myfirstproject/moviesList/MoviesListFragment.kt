@@ -34,7 +34,6 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private var viewBinding: FragmentMoviesListBinding? = null
     private var sort: Category = Category.POPULAR
-    private var isRestart = false
 
     private val adapter: MovieViewsAdapter by lazy {
         MovieViewsAdapter { movie: MoviesItem ->
@@ -54,11 +53,6 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         viewModel.getConfiguration()
     }
 
-    override fun onPause() {
-        super.onPause()
-        isRestart = true
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         viewBinding = null
@@ -71,9 +65,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         configureSpinner()
         initAdapter()
 
-        with(viewBinding ?: return) {
-            retryButton.setOnClickListener { adapter.retry() }
-        }
+        viewBinding?.retryButton?.setOnClickListener { adapter.retry() }
     }
 
     private fun initAdapter() {
@@ -121,7 +113,6 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
             moviesSwipe.setOnRefreshListener {
                 if (Connect.isConnected) {
                     viewModel.getMovies(sort = sort, isRefresh = true)
-                    isRestart = false
                 } else {
                     moviesSwipe.isRefreshing = false
                     ToastUtil.showToastNotConnected(requireContext())
