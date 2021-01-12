@@ -1,6 +1,8 @@
 package ru.petrgostev.myfirstproject.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import dagger.Module
+import dagger.Provides
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -15,6 +17,7 @@ import ru.petrgostev.myfirstproject.utils.ApiKey
 import ru.petrgostev.myfirstproject.utils.BaseUrl
 import java.util.concurrent.TimeUnit
 
+@Module
 class NetworkModule {
 
     private val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
@@ -57,6 +60,9 @@ class NetworkModule {
         .client(httpClient)
         .addConverterFactory(json.asConverterFactory(contentType))
         .build()
+
+    @Provides
+    fun getNetworkModule(): NetworkModule = this
 
     val genreApi: GenreApi = retrofit.create()
     val moviesApi: MoviesApi = retrofit.create()
