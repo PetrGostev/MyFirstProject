@@ -26,7 +26,7 @@ class MoviesListViewModel(private val networkRepository: NetworkRepositoryInterf
 
     private val genres = GenresMap.genres
     private var sort: Category = Category.POPULAR
-    private var moviesResult: Flow<PagingData<MoviesItem>>? = null
+    private var moviesResult: LiveData<PagingData<MoviesItem>>? = null
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         Log.e(TAG, "Coroutine exception, scope active:${viewModelScope.isActive}", throwable)
@@ -62,23 +62,34 @@ class MoviesListViewModel(private val networkRepository: NetworkRepositoryInterf
     }
 
     fun getMovies(sort: Category, isRefresh: Boolean) {
-        viewModelScope.launch {
-            loadMovies(sort, isRefresh).collectLatest { _mutableMoviesPagingList.postValue(it) }
-        }
+        loadMovies(sort, isRefresh)
+//        viewModelScope.launch {
+//            val value: PagingData<MoviesItem>? = loadMovies(sort, isRefresh).value
+//            if (value != null) {
+//                _mutableMoviesPagingList.postValue(value)
+//            }
+
+//            loadMovies(sort, isRefresh) { _mutableMoviesPagingList.postValue(it) }
+//        }
     }
 
 
-    private fun loadMovies(sort: Category, isRefresh: Boolean): Flow<PagingData<MoviesItem>> {
+    private  fun loadMovies(sort: Category, isRefresh: Boolean): LiveData<PagingData<MoviesItem>> {
         val lastResult = moviesResult
-        if (lastResult != null && this.sort == sort && !isRefresh) {
+        if (lastResult?.value != null && this.sort == sort && !isRefresh) {
             return lastResult
         }
 
-        val newResult: Flow<PagingData<MoviesItem>> = networkRepository.getMovies(sort)
+        val newResult: LiveData<PagingData<MoviesItem>> = networkRepository.getMovies(sort)
             .cachedIn(viewModelScope)
 
         moviesResult = newResult
         this.sort = sort
+        val data: PagingData<MoviesItem>? = newResult.value
+        if (data != null) {
+            _mutableMoviesPagingList.postValue(data)
+        }
+
         _mutableIsConnected.postValue(true)
         return newResult
     }
