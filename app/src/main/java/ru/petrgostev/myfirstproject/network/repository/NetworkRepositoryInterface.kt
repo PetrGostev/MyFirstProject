@@ -1,6 +1,5 @@
 package ru.petrgostev.myfirstproject.network.repository
 
-import androidx.lifecycle.LiveData
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import ru.petrgostev.myfirstproject.network.pojo.GenresItem
@@ -17,5 +16,5 @@ interface NetworkRepositoryInterface {
 
     suspend fun getImages(): ImagesResponse
 
-    fun getMovies(sort: Category): LiveData<PagingData<MoviesItem>>
+    fun getMovies(sort: Category): Flow<PagingData<MoviesItem>>
 }
