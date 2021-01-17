@@ -38,7 +38,6 @@ class NetworkModule {
 
     private val httpClient: OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(apiKeyInterceptor)
-        .addInterceptor(httpLoggingInterceptor)
         .addNetworkInterceptor(httpLoggingInterceptor)
         .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
         .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)

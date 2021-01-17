@@ -6,15 +6,10 @@ import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 import ru.petrgostev.myfirstproject.network.pojo.GenresItem
 import ru.petrgostev.myfirstproject.network.pojo.MoviesItem
 import ru.petrgostev.myfirstproject.network.repository.NetworkRepositoryInterface
-import ru.petrgostev.myfirstproject.utils.Category
-import ru.petrgostev.myfirstproject.utils.GenresMap
-import ru.petrgostev.myfirstproject.utils.ImagesBaseUrl
-import ru.petrgostev.myfirstproject.utils.PosterSizeList
+import ru.petrgostev.myfirstproject.utils.*
 
 class MoviesListViewModel(private val networkRepository: NetworkRepositoryInterface) : ViewModel() {
 
@@ -26,7 +21,11 @@ class MoviesListViewModel(private val networkRepository: NetworkRepositoryInterf
 
     private val genres = GenresMap.genres
     private var sort: Category = Category.POPULAR
-    private var moviesResult: Flow<PagingData<MoviesItem>>? = null
+    private var moviesResult: LiveData<PagingData<MoviesItem>>? = null
+
+    private val observer =  Observer<PagingData<MoviesItem>>{
+        _mutableMoviesPagingList.postValue(it)
+    }
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         Log.e(TAG, "Coroutine exception, scope active:${viewModelScope.isActive}", throwable)
@@ -62,24 +61,22 @@ class MoviesListViewModel(private val networkRepository: NetworkRepositoryInterf
     }
 
     fun getMovies(sort: Category, isRefresh: Boolean) {
+        if (moviesResult != null && this.sort == sort && !isRefresh) {
+            return
+        }
+
+        this.sort = sort
+
         viewModelScope.launch {
-            loadMovies(sort, isRefresh).collectLatest { _mutableMoviesPagingList.postValue(it) }
+            moviesResult = networkRepository.getMovies(sort).cachedIn(viewModelScope)
+            moviesResult?.observeForever (observer)
+
+            _mutableIsConnected.postValue(true)
         }
     }
 
-
-    private fun loadMovies(sort: Category, isRefresh: Boolean): Flow<PagingData<MoviesItem>> {
-        val lastResult = moviesResult
-        if (lastResult != null && this.sort == sort && !isRefresh) {
-            return lastResult
-        }
-
-        val newResult: Flow<PagingData<MoviesItem>> = networkRepository.getMovies(sort)
-            .cachedIn(viewModelScope)
-
-        moviesResult = newResult
-        this.sort = sort
-        _mutableIsConnected.postValue(true)
-        return newResult
+    override fun onCleared() {
+        moviesResult?.removeObserver(observer)
+        super.onCleared()
     }
 }

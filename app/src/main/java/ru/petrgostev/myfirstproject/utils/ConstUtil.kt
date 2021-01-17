@@ -19,5 +19,5 @@ object Adult{
 }
 
 object PageSize{
-    const val PAGE_SIZE = 50
+    var PAGE_SIZE = 20
 }
