@@ -3,36 +3,38 @@ package ru.petrgostev.myfirstproject.moviesDetails
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import androidx.fragment.app.viewModels
+import coil.load
 import ru.petrgostev.myfirstproject.R
-import ru.petrgostev.myfirstproject.moviesDetails.adapter.ActorViewsAdapter
-import ru.petrgostev.myfirstproject.data.Movie
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesDetailsBinding
+import ru.petrgostev.myfirstproject.di.App
+import ru.petrgostev.myfirstproject.network.repository.NetworkRepository
+import ru.petrgostev.myfirstproject.network.pojo.MovieDetailsResponse
+import ru.petrgostev.myfirstproject.network.repository.NetworkRepositoryInterface
 
 class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
 
-    companion object {
-        private const val ARG_MOVIE = "movie"
+    private val networkRepository: NetworkRepositoryInterface by lazy { NetworkRepository(App.component.getNetworkModule())}
 
-        fun newInstance(movie: Movie): MoviesDetailsFragment = MoviesDetailsFragment().apply {
-            arguments = bundleOf(
-                ARG_MOVIE to movie
-            )
-        }
+    private val viewModel: MoviesDetailsViewModel by viewModels {
+        MoviesDetailsViewModelFactory(networkRepository)
     }
 
     private var viewBinding: FragmentMoviesDetailsBinding? = null
-    private var movie: Movie? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewBinding = FragmentMoviesDetailsBinding.bind(view)
-        movie = requireArguments().getParcelable(ARG_MOVIE)
 
-        setupViews()
+        viewModel.movie.observe(this.viewLifecycleOwner, this::setupMovie)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.loadMovie(requireArguments().getInt(ARG_MOVIE_ID))
     }
 
     override fun onDestroyView() {
@@ -40,42 +42,37 @@ class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
         viewBinding = null
     }
 
-    private fun setupViews() {
-        val adapter = ActorViewsAdapter()
-
-        val genresList: List<String> = movie?.genres?.map { it.name } ?: emptyList()
+    private fun setupMovie(movieDetails: MovieDetailsResponse) {
+        val genresList: List<String> = movieDetails.genres.map { it.name }
 
         with(viewBinding ?: return) {
-            minimumAge.text =
-                requireActivity().getString(R.string.age_limit, movie?.minimumAge)
-            title.text = movie?.title.orEmpty()
-            this.genres.text = genresList.joinToString()
-            rating.rating = movie?.rating_5 ?: 0.0f
-            reviewsQuantity.text =
-                requireActivity().getString(R.string.reviews_quantity, movie?.numberOfRatings)
-            storylineText.text = movie?.overview
 
-            if (movie?.actors != null && movie?.actors?.isEmpty() == false) {
-                actorTitle.visibility = View.VISIBLE
-            } else {
-                actorTitle.visibility = View.GONE
+            image.load(movieDetails.moviePoster) {
+                crossfade(true)
+                error(R.drawable.poster_none)
             }
 
-            actorsRecycler.adapter = adapter
-
-            adapter.submitList(movie?.actors)
+            minimumAge.text = getString(R.string.age_limit, movieDetails.minimumAge)
+            title.text = movieDetails.title
+            this.genres.text = genresList.joinToString()
+            rating.rating = movieDetails.rating_5
+            reviewsQuantity.text = getString(R.string.reviews_quantity, movieDetails.voteCount)
+            storylineTitle.isGone = movieDetails.overview.isEmpty()
+            storylineText.text = movieDetails.overview
 
             backButton.setOnClickListener {
                 requireActivity().onBackPressed()
             }
+        }
+    }
 
-            Glide.with(requireContext())
-                .load(movie?.backdrop)
-                .apply(
-                    RequestOptions()
-                        .fallback(R.drawable.poster_none)
-                )
+    companion object {
+        private const val ARG_MOVIE_ID = "movieId"
+
+        fun newInstance(movieId: Int): MoviesDetailsFragment = MoviesDetailsFragment().apply {
+            arguments = bundleOf(
+                ARG_MOVIE_ID to movieId
+            )
         }
     }
 }
-

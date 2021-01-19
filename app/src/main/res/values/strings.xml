@@ -8,4 +8,17 @@
     <string name="reviews_quantity">%d Reviews</string>
     <string name="age_limit">%d+</string>
     <string name="cast">Cast</string>
+
+    <string name="no_connection_yet">Соединение еще не установлено! Попробуйте еще раз!</string>
+    <string name="no_connecting">Отсутствует интернет соединение!</string>
+    <string name="retry">Retry</string>
+    <string name="error_state">😨 Wooops %s</string>
+    <string name="restart_text">Restart</string>
+    <string name="cancel_text">Cancel</string>
+
+    <string-array name="spinner_items">
+        <item>popular</item>
+        <item>rated</item>
+        <item>upcoming</item>
+    </string-array>
 </resources>

@@ -87,23 +87,22 @@
         android:id="@+id/movies_swipe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="@dimen/space_2x"
+        android:paddingStart="@dimen/space_1x"
         android:layout_marginTop="@dimen/space_1x"
-        android:layout_marginEnd="@dimen/space_2x"
-        android:paddingBottom="@dimen/space_8x"
+        android:paddingEnd="@dimen/space_1x"
         android:orientation="vertical"
+        android:paddingBottom="@dimen/space_9x"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/movies_recycler"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/item_offset"
+            android:clipToPadding="false"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="2"
+            app:spanCount="3"
             tools:itemCount="4"
             tools:listitem="@layout/view_holder_movie">
 
