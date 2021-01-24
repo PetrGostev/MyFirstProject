@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.moviesDetails
+package ru.petrgostev.myfirstproject.ui.moviesDetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

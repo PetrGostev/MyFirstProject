@@ -5,7 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.liveData
-import ru.petrgostev.myfirstproject.moviesList.padding.MoviesPagingSource
+import ru.petrgostev.myfirstproject.ui.moviesList.padding.MoviesPagingSource
 import ru.petrgostev.myfirstproject.data.network.api.NetworkModule
 import ru.petrgostev.myfirstproject.data.network.pojo.GenresItem
 import ru.petrgostev.myfirstproject.data.network.pojo.ImagesResponse

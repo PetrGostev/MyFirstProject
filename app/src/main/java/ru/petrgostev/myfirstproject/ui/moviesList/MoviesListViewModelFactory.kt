@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.moviesList
+package ru.petrgostev.myfirstproject.ui.moviesList
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

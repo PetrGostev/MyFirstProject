@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.moviesDetails
+package ru.petrgostev.myfirstproject.ui.moviesDetails
 
 import android.os.Bundle
 import android.view.View

@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.moviesList
+package ru.petrgostev.myfirstproject.ui.moviesList
 
 import android.os.Bundle
 import android.view.View
@@ -16,8 +16,8 @@ import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.Router
 import ru.petrgostev.myfirstproject.data.repository.RepositoriesFacade
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesListBinding
-import ru.petrgostev.myfirstproject.moviesList.adapter.MovieViewsAdapter
-import ru.petrgostev.myfirstproject.moviesList.padding.adapter.MovieLoadStateAdapter
+import ru.petrgostev.myfirstproject.ui.moviesList.adapter.MovieViewsAdapter
+import ru.petrgostev.myfirstproject.ui.moviesList.padding.adapter.MovieLoadStateAdapter
 import ru.petrgostev.myfirstproject.data.network.pojo.MoviesItem
 import ru.petrgostev.myfirstproject.utils.*
 

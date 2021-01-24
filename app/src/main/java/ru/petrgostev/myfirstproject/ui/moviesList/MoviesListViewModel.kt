@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.moviesList
+package ru.petrgostev.myfirstproject.ui.moviesList
 
 import android.content.ContentValues.TAG
 import android.util.Log

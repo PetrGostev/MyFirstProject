@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.moviesList.adapter
+package ru.petrgostev.myfirstproject.ui.moviesList.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 import ru.petrgostev.myfirstproject.data.network.pojo.MoviesItem
