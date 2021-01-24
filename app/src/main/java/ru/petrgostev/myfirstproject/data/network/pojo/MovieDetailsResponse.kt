@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.network.pojo
+package ru.petrgostev.myfirstproject.data.network.pojo
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -46,7 +46,7 @@ class MovieDetailsResponse(
     val voteAverage: Double,
 
     @SerialName("tagline")
-    val tagline: String,
+    val tagLine: String,
 
     @SerialName("adult")
     val adult: Boolean,

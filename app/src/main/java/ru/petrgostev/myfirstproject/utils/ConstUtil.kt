@@ -8,6 +8,10 @@ object ApiKey{
     const val API_KEY_VALUE= "ab3d7335ac128bcec0b0a8926034daa4"
 }
 
+object DateFormat{
+    const val DATE_FORMAT= "dd/M/yyyy\""
+}
+
 object Language{
     const val LANGUAGE_RU= "ru"
     const val LANGUAGE_EN= "en"
@@ -19,5 +23,5 @@ object Adult{
 }
 
 object PageSize{
-    var PAGE_SIZE = 20
+    var PAGE_SIZE = 120
 }

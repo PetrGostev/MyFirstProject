@@ -1,10 +1,10 @@
-package ru.petrgostev.myfirstproject.network.api
+package ru.petrgostev.myfirstproject.data.network.api
 
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import ru.petrgostev.myfirstproject.network.pojo.MovieDetailsResponse
-import ru.petrgostev.myfirstproject.network.pojo.MoviesResponse
+import ru.petrgostev.myfirstproject.data.network.pojo.MovieDetailsResponse
+import ru.petrgostev.myfirstproject.data.network.pojo.MoviesResponse
 import ru.petrgostev.myfirstproject.utils.Language
 
 interface MoviesApi {

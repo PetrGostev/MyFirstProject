@@ -1,7 +1,7 @@
-package ru.petrgostev.myfirstproject.network.api
+package ru.petrgostev.myfirstproject.data.network.api
 
 import retrofit2.http.GET
-import ru.petrgostev.myfirstproject.network.pojo.ConfigurationResponse
+import ru.petrgostev.myfirstproject.data.network.pojo.ConfigurationResponse
 
 interface ConfigurationApi {
     

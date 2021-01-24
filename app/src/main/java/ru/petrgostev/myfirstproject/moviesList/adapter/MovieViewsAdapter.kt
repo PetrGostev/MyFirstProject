@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import ru.petrgostev.myfirstproject.R
-import ru.petrgostev.myfirstproject.network.pojo.MoviesItem
+import ru.petrgostev.myfirstproject.data.network.pojo.MoviesItem
 
 class MovieViewsAdapter(private val clickListener: (movieResponse: MoviesItem) -> Unit) :
     PagingDataAdapter<MoviesItem, MovieViewHolder>(MovieDiffUtilCallback()) {

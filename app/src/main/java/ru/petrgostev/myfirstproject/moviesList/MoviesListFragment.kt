@@ -14,12 +14,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.Router
+import ru.petrgostev.myfirstproject.data.repository.RepositoriesFacade
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesListBinding
-import ru.petrgostev.myfirstproject.di.App
 import ru.petrgostev.myfirstproject.moviesList.adapter.MovieViewsAdapter
 import ru.petrgostev.myfirstproject.moviesList.padding.adapter.MovieLoadStateAdapter
-import ru.petrgostev.myfirstproject.network.repository.NetworkRepository
-import ru.petrgostev.myfirstproject.network.pojo.MoviesItem
+import ru.petrgostev.myfirstproject.data.network.pojo.MoviesItem
 import ru.petrgostev.myfirstproject.utils.*
 
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
@@ -29,7 +28,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     private var moviesJob: Job? = null
 
     private val viewModel: MoviesListViewModel by viewModels {
-        MoviesListViewModelFactory(NetworkRepository(App.component.getNetworkModule()))
+        MoviesListViewModelFactory(RepositoriesFacade())
     }
 
     private var viewBinding: FragmentMoviesListBinding? = null
@@ -46,11 +45,6 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         initViews(view)
         viewModel.isConnected.observe(this.viewLifecycleOwner, this::showToastNoConnectionYet)
         viewModel.moviesPagingList.observe(this.viewLifecycleOwner, this::updateAdapter)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.getConfiguration()
     }
 
     override fun onDestroyView() {
@@ -112,7 +106,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
             moviesSwipe.setOnRefreshListener {
                 if (Connect.isConnected) {
-                    viewModel.getMovies(sort = sort, isRefresh = true)
+                    viewModel.getConfiguration(sort = sort, isRefresh = true)
                 } else {
                     moviesSwipe.isRefreshing = false
                     ToastUtil.showToastNotConnected(requireContext())
@@ -145,7 +139,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                         return
                     }
 
-                    viewModel.getMovies(sort = sort, isRefresh = false)
+                    viewModel.getConfiguration(sort = sort, isRefresh = false)
                 }
             }
         }

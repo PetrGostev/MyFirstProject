@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.petrgostev.myfirstproject.network.pojo.MovieDetailsResponse
-import ru.petrgostev.myfirstproject.network.repository.NetworkRepositoryInterface
+import ru.petrgostev.myfirstproject.data.network.pojo.MovieDetailsResponse
+import ru.petrgostev.myfirstproject.data.repository.NetworkRepositoryInterface
 
 class MoviesDetailsViewModel(private val networkRepository: NetworkRepositoryInterface) : ViewModel() {
 

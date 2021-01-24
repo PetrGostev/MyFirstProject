@@ -2,7 +2,7 @@ package ru.petrgostev.myfirstproject.moviesDetails
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import ru.petrgostev.myfirstproject.network.repository.NetworkRepositoryInterface
+import ru.petrgostev.myfirstproject.data.repository.NetworkRepositoryInterface
 
 class MoviesDetailsViewModelFactory(private val networkRepository: NetworkRepositoryInterface) : ViewModelProvider.Factory {
 

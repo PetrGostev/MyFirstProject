@@ -1,8 +1,8 @@
-package ru.petrgostev.myfirstproject.network.api
+package ru.petrgostev.myfirstproject.data.network.api
 
 import retrofit2.http.GET
 import retrofit2.http.Query
-import ru.petrgostev.myfirstproject.network.pojo.GenresResponse
+import ru.petrgostev.myfirstproject.data.network.pojo.GenresResponse
 import ru.petrgostev.myfirstproject.utils.Language
 
 interface GenreApi {

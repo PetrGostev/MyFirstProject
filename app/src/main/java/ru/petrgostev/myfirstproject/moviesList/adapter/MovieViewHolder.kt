@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.aids61517.easyratingview.EasyRatingView
 import ru.petrgostev.myfirstproject.R
-import ru.petrgostev.myfirstproject.network.pojo.MoviesItem
+import ru.petrgostev.myfirstproject.data.network.pojo.MoviesItem
 
 class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -27,7 +27,7 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         movieAgeLimit.text = itemView.context.getString(R.string.age_limit, moviesItem.minimumAge)
         //TODO 01: movieLike.setImageResource(resId)
-        movieGenres.text = moviesItem.genre.toString()
+        movieGenres.text = moviesItem.genre().toString()
         movieRating.rating = moviesItem.rating_5
         movieReviewsQuantity.text = itemView.context.getString(R.string.reviews_quantity, moviesItem.voteCount)
         movieTitle.text = moviesItem.title

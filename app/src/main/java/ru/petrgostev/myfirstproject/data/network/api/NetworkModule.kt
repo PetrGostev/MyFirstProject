@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.network.api
+package ru.petrgostev.myfirstproject.data.network.api
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
