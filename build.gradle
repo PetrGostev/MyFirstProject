@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-serialization:1.4.21"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
 
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -17,9 +17,10 @@ buildscript {
 }
 
 ext {
-    pagingVersion = '3.0.0-alpha11'
+    pagingVersion = '3.0.0-alpha12'
     lifecycleVersion = '2.2.0'
     daggerVersion = '2.27'
+    roomVersion = '2.2.6'
 }
 
 allprojects {

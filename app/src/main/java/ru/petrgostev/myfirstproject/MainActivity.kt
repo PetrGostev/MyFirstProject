@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import ru.petrgostev.myfirstproject.moviesDetails.MoviesDetailsFragment
-import ru.petrgostev.myfirstproject.moviesList.MoviesListFragment
+import ru.petrgostev.myfirstproject.ui.moviesDetails.MoviesDetailsFragment
+import ru.petrgostev.myfirstproject.ui.moviesList.MoviesListFragment
 import ru.petrgostev.myfirstproject.utils.*
 
 class MainActivity : AppCompatActivity(), Router {
