@@ -15,7 +15,7 @@ abstract class FavoritesDataBase : RoomDatabase() {
     companion object {
         private const val DB_NAME = "favoritesDataBase"
 
-        val instance: FavoritesDataBase by lazy {
+        val INSTANCE: FavoritesDataBase by lazy {
             Room.databaseBuilder(
                 App.appContext,
                 FavoritesDataBase::class.java,
