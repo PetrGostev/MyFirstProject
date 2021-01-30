@@ -10,33 +10,39 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.work.WorkManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.Router
 import ru.petrgostev.myfirstproject.data.repository.RepositoriesFacade
+import ru.petrgostev.myfirstproject.data.repository.RepositoriesFacadeInterface
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesListBinding
 import ru.petrgostev.myfirstproject.ui.moviesList.adapter.MovieViewsAdapter
 import ru.petrgostev.myfirstproject.ui.moviesList.padding.adapter.MovieLoadStateAdapter
-import ru.petrgostev.myfirstproject.data.network.pojo.MoviesItem
+import ru.petrgostev.myfirstproject.data.worker.MoviesWorkRepository
 import ru.petrgostev.myfirstproject.utils.*
 
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private val parentRouter: Router? by lazy { activity as? Router }
 
+    private val repositoriesFacade: RepositoriesFacadeInterface = RepositoriesFacade()
+
     private var moviesJob: Job? = null
 
+    private val workRepository = MoviesWorkRepository()
+
     private val viewModel: MoviesListViewModel by viewModels {
-        MoviesListViewModelFactory(RepositoriesFacade())
+        MoviesListViewModelFactory(repositoriesFacade)
     }
 
     private var viewBinding: FragmentMoviesListBinding? = null
     private var sort: Category = Category.POPULAR
 
     private val adapter: MovieViewsAdapter by lazy {
-        MovieViewsAdapter { movie: MoviesItem ->
-            movie.id?.let { parentRouter?.openMoviesDetailsFragment(it) }
+        MovieViewsAdapter { movie: MoviesViewItem ->
+            movie.id.let { parentRouter?.openMoviesDetailsFragment(it) }
         }
     }
 
@@ -44,7 +50,11 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         super.onViewCreated(view, savedInstanceState)
         initViews(view)
         viewModel.isConnected.observe(this.viewLifecycleOwner, this::showToastNoConnectionYet)
-        viewModel.moviesPagingList.observe(this.viewLifecycleOwner, this::updateAdapter)
+        viewModel.moviesPagingList.observe(this.viewLifecycleOwner, {
+            this.updateAdapter(it)
+        })
+
+        WorkManager.getInstance(requireContext()).enqueue(workRepository.configurationRequest)
     }
 
     override fun onDestroyView() {
@@ -68,14 +78,14 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
             footer = MovieLoadStateAdapter { adapter.retry() }
         )
         adapter.addLoadStateListener { loadState ->
-            // Only show the list if refresh succeeds.
+            // Показывать список только в том случае, если обновление прошло успешно.
             viewBinding?.moviesRecycler?.isVisible =
                 loadState.source.refresh is LoadState.NotLoading
-            // Show loading spinner during initial load or refresh.
+            // Show loading  во время начальной загрузки или обновления.
             viewBinding?.loader?.isVisible = loadState.source.refresh is LoadState.Loading
-            // hide the boot counter after the update.
+            // hide loading после обновления.
             viewBinding?.moviesSwipe?.isRefreshing = false
-            // Show the retry state if initial load or refresh fails.
+            // Показывать состояние повтора, если начальная загрузка или обновление завершатся неудачно.
             viewBinding?.retryButton?.isVisible = loadState.source.refresh is LoadState.Error
 
             val errorState = loadState.source.append as? LoadState.Error
@@ -92,7 +102,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         }
     }
 
-    private fun updateAdapter(movies: PagingData<MoviesItem>) {
+    private fun updateAdapter(movies: PagingData<MoviesViewItem>) {
         moviesJob?.cancel()
         moviesJob = lifecycleScope.launch {
             adapter.submitData(movies)
@@ -106,7 +116,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
             moviesSwipe.setOnRefreshListener {
                 if (Connect.isConnected) {
-                    viewModel.getConfiguration(sort = sort, isRefresh = true)
+                    viewModel.getData(sort = sort, isRefresh = true)
                 } else {
                     moviesSwipe.isRefreshing = false
                     ToastUtil.showToastNotConnected(requireContext())
@@ -139,7 +149,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                         return
                     }
 
-                    viewModel.getConfiguration(sort = sort, isRefresh = false)
+                    viewModel.getData(sort = sort, isRefresh = false)
                 }
             }
         }

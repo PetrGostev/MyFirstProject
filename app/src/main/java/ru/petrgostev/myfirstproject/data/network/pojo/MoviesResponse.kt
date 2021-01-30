@@ -42,7 +42,7 @@ data class MoviesItem(
     val voteAverage: Double = 0.0,
 
     @SerialName("id")
-    val id: Int?,
+    val id: Int,
 
     @SerialName("adult")
     val adult: Boolean,
@@ -53,11 +53,13 @@ data class MoviesItem(
     val moviePoster:String = ImagesBaseUrl.IMAGES_BASE_URL + PosterSizeEnum.W500.size + posterPath
     val rating_5: Float = (voteAverage / 2).toFloat()
     val minimumAge: Int = if (adult) Adult.ADULT else Adult.NOT_ADULT
-    val genre: () -> String = {
+
+    fun getGenre(): String {
         val genres = mutableListOf<String>()
         genreIds?.forEach {
             genres.add(GenresMap.genres.getValue(it))
         }
-        genres.joinToString()
+
+        return genres.joinToString()
     }
 }

@@ -5,9 +5,10 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.data.network.pojo.MoviesItem
+import ru.petrgostev.myfirstproject.ui.moviesList.MoviesViewItem
 
-class MovieViewsAdapter(private val clickListener: (movieResponse: MoviesItem) -> Unit) :
-    PagingDataAdapter<MoviesItem, MovieViewHolder>(MovieDiffUtilCallback()) {
+class MovieViewsAdapter(private val clickListener: (moviesViewItem: MoviesViewItem) -> Unit) :
+    PagingDataAdapter<MoviesViewItem, MovieViewHolder>(MovieDiffUtilCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         return MovieViewHolder(

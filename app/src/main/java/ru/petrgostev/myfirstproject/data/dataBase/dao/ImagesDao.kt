@@ -12,5 +12,5 @@ interface ImagesDao {
     suspend fun insertConfiguration(images: ImagesEntity)
 
     @Query("SELECT * FROM images")
-    suspend fun getConfiguration(): ImagesEntity?
+    suspend fun getConfiguration(): ImagesEntity
 }

@@ -6,6 +6,7 @@ import ru.petrgostev.myfirstproject.data.network.pojo.GenresItem
 import ru.petrgostev.myfirstproject.data.network.pojo.ImagesResponse
 import ru.petrgostev.myfirstproject.data.network.pojo.MovieDetailsResponse
 import ru.petrgostev.myfirstproject.data.network.pojo.MoviesItem
+import ru.petrgostev.myfirstproject.ui.moviesList.MoviesViewItem
 import ru.petrgostev.myfirstproject.utils.Category
 
 interface NetworkRepositoryInterface {
@@ -16,5 +17,5 @@ interface NetworkRepositoryInterface {
 
     suspend fun getImages(): ImagesResponse
 
-    fun getMovies(sort: Category): LiveData<PagingData<MoviesItem>>
+    fun getMovies(sort: Category): LiveData<PagingData<MoviesViewItem>>
 }

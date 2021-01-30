@@ -1,9 +1,7 @@
 package ru.petrgostev.myfirstproject.data.repository
 
-import ru.petrgostev.myfirstproject.data.dataBase.entity.ImagesEntity
-import ru.petrgostev.myfirstproject.data.dataBase.entity.DateUpdateEntity
-import ru.petrgostev.myfirstproject.data.dataBase.entity.FavouritesEntity
-import ru.petrgostev.myfirstproject.data.dataBase.entity.GenresEntity
+import ru.petrgostev.myfirstproject.data.dataBase.entity.*
+import ru.petrgostev.myfirstproject.utils.Category
 
 interface DataBaseRepositoryInterface {
     suspend fun getDateUpdateEntity() : DateUpdateEntity?
@@ -14,4 +12,11 @@ interface DataBaseRepositoryInterface {
     suspend fun setGenres(genres:List<GenresEntity>)
     suspend fun getFavourites(): List<FavouritesEntity>?
     suspend fun setFavourite(favourite: FavouritesEntity)
+    suspend fun getMovies(sort: Category): List<BaseMoviesEntity>
+    suspend fun setPopularMovies(movies: List<PopularMoviesEntity>)
+    suspend fun getTopRatingMovies(): List<TopRatingMoviesEntity>
+    suspend fun setTopRatingMovies(movies: List<TopRatingMoviesEntity>)
+    suspend fun getUpcomingMovies(): List<UpcomingMoviesEntity>
+    suspend fun setUpcomingMovies(movies: List<UpcomingMoviesEntity>)
+    suspend fun deleteMovies(sort:Category)
 }

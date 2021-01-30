@@ -1,44 +1,71 @@
 package ru.petrgostev.myfirstproject.data.repository
 
-import ru.petrgostev.myfirstproject.data.dataBase.ImagesDataBase
-import ru.petrgostev.myfirstproject.data.dataBase.FavoritesDataBase
-import ru.petrgostev.myfirstproject.data.dataBase.entity.ImagesEntity
-import ru.petrgostev.myfirstproject.data.dataBase.entity.DateUpdateEntity
-import ru.petrgostev.myfirstproject.data.dataBase.entity.FavouritesEntity
-import ru.petrgostev.myfirstproject.data.dataBase.entity.GenresEntity
+import ru.petrgostev.myfirstproject.data.dataBase.MoviesDataBase
+import ru.petrgostev.myfirstproject.data.dataBase.entity.*
+import ru.petrgostev.myfirstproject.utils.Category
 
 class DataBaseRepository : DataBaseRepositoryInterface {
 
-    private val configurationDataBase = ImagesDataBase.INSTANCE
-    private val favoritesDataBase = FavoritesDataBase.instance
+    private val moviesDataBase = MoviesDataBase.INSTANCE
 
     override suspend fun getDateUpdateEntity(): DateUpdateEntity? =
-        configurationDataBase.dateUpdateDao().getDate()
+        moviesDataBase.dateUpdateDao().getDate()
 
     override suspend fun setDateUpdateEntity(date: DateUpdateEntity) {
-        configurationDataBase.dateUpdateDao().insertDate(date)
+        moviesDataBase.dateUpdateDao().insertDate(date)
     }
 
-    override suspend fun getImages(): ImagesEntity? =
-        configurationDataBase.configurationDao().getConfiguration()
+    override suspend fun getImages(): ImagesEntity =
+        moviesDataBase.configurationDao().getConfiguration()
 
     override suspend fun setImages(images: ImagesEntity) {
-        configurationDataBase.configurationDao().insertConfiguration(images)
+        moviesDataBase.configurationDao().insertConfiguration(images)
     }
 
-    override suspend fun getGenres(): List<GenresEntity>? =
-        configurationDataBase.genresDao().getAll()
-
+    override suspend fun getGenres(): List<GenresEntity> =
+        moviesDataBase.genresDao().getAll()
 
     override suspend fun setGenres(genres: List<GenresEntity>) {
-        configurationDataBase.genresDao().insertAll(genres)
+        moviesDataBase.genresDao().insertAll(genres)
     }
 
     override suspend fun getFavourites(): List<FavouritesEntity>? =
-        favoritesDataBase.favouritesDao().getAll()
-
+        moviesDataBase.favouritesDao().getAll()
 
     override suspend fun setFavourite(favourite: FavouritesEntity) {
-        favoritesDataBase.favouritesDao().setFavorite(favourite)
+        moviesDataBase.favouritesDao().setFavorite(favourite)
+    }
+
+    override suspend fun getMovies(sort: Category): List<BaseMoviesEntity> =
+        when (sort) {
+            Category.TOP_RATED -> moviesDataBase.topRatingMoviesDao().getAll()
+            Category.UPCOMING -> moviesDataBase.upcomingMoviesDao().getAll()
+            else -> moviesDataBase.popularMoviesDao().getAll()
+        }
+
+    override suspend fun setPopularMovies(movies: List<PopularMoviesEntity>) {
+        moviesDataBase.popularMoviesDao().insertAll(movies)
+    }
+
+    override suspend fun getTopRatingMovies(): List<TopRatingMoviesEntity> =
+        moviesDataBase.topRatingMoviesDao().getAll()
+
+    override suspend fun setTopRatingMovies(movies: List<TopRatingMoviesEntity>) {
+        moviesDataBase.topRatingMoviesDao().insertAll(movies)
+    }
+
+    override suspend fun getUpcomingMovies(): List<UpcomingMoviesEntity> =
+        moviesDataBase.upcomingMoviesDao().getAll()
+
+    override suspend fun setUpcomingMovies(movies: List<UpcomingMoviesEntity>) {
+        moviesDataBase.upcomingMoviesDao().insertAll(movies)
+    }
+
+    override suspend fun deleteMovies(sort: Category) {
+        when (sort) {
+            Category.TOP_RATED -> moviesDataBase.topRatingMoviesDao().clearAll()
+            Category.UPCOMING -> moviesDataBase.upcomingMoviesDao().clearAll()
+            else -> moviesDataBase.popularMoviesDao().clearAll()
+        }
     }
 }

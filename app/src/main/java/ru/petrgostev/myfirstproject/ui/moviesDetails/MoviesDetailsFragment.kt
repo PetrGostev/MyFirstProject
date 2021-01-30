@@ -10,15 +10,17 @@ import coil.load
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesDetailsBinding
 import ru.petrgostev.myfirstproject.di.App
-import ru.petrgostev.myfirstproject.data.repository.NetworkRepository
 import ru.petrgostev.myfirstproject.data.network.pojo.MovieDetailsResponse
-import ru.petrgostev.myfirstproject.data.repository.NetworkRepositoryInterface
+import ru.petrgostev.myfirstproject.data.repository.*
 
 class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
+
+    private val dataBaseRepository: DataBaseRepositoryInterface  by lazy { DataBaseRepository() }
 
     private val networkRepository: NetworkRepositoryInterface by lazy {
         NetworkRepository(
             App.component.getNetworkModule(),
+            dataBaseRepository
         )
     }
 
