@@ -9,11 +9,15 @@ import androidx.paging.cachedIn
 import kotlinx.coroutines.*
 import ru.petrgostev.myfirstproject.data.dataBase.entity.*
 import ru.petrgostev.myfirstproject.data.network.pojo.GenresItem
-import ru.petrgostev.myfirstproject.data.repository.RepositoriesFacadeInterface
+import ru.petrgostev.myfirstproject.data.repository.IConfigurationRepository
+import ru.petrgostev.myfirstproject.data.repository.IMoviesRepository
 import ru.petrgostev.myfirstproject.utils.*
 import java.util.*
 
-class MoviesListViewModel(private val repositoriesFacade: RepositoriesFacadeInterface) : ViewModel() {
+class MoviesListViewModel(
+    private val configurationRepository: IConfigurationRepository,
+    private val moviesRepository: IMoviesRepository
+) : ViewModel() {
 
     private val _mutableIsConnected = MutableLiveData<Boolean>(true)
     private val _mutableMoviesPagingList = MutableLiveData<PagingData<MoviesViewItem>>()
@@ -24,7 +28,7 @@ class MoviesListViewModel(private val repositoriesFacade: RepositoriesFacadeInte
     private var sort: Category = Category.POPULAR
     private var moviesResult: LiveData<PagingData<MoviesViewItem>>? = null
 
-    private val observer = Observer<PagingData<MoviesViewItem>> {
+    private val pagingObserver = Observer<PagingData<MoviesViewItem>> {
         _mutableMoviesPagingList.postValue(it)
     }
 
@@ -50,7 +54,7 @@ class MoviesListViewModel(private val repositoriesFacade: RepositoriesFacadeInte
     }
 
     private suspend fun checkUpdateDate() {
-        val updateDate = repositoriesFacade.getDateUpdateEntity()?.dateUpdate
+        val updateDate = configurationRepository.getDateUpdateEntity()?.dateUpdate
         if (updateDate != null) {
             MoviesDate.IS_RELEVANT_UPDATE_DATE =
                 MoviesDate.FORMAT_DATE.format(updateDate) == MoviesDate.FORMAT_DATE.format(Date())
@@ -58,8 +62,8 @@ class MoviesListViewModel(private val repositoriesFacade: RepositoriesFacadeInte
     }
 
     private suspend fun loadImagesAndGenres() {
-        val imagesEntity = repositoriesFacade.getImagesEntity()
-        val genres: List<GenresEntity>? = repositoriesFacade.getGenresEntities()
+        val imagesEntity = configurationRepository.getImagesEntity()
+        val genres: List<GenresEntity>? = configurationRepository.getGenresEntities()
 
         if (imagesEntity != null && genres != null) {
 
@@ -76,13 +80,13 @@ class MoviesListViewModel(private val repositoriesFacade: RepositoriesFacadeInte
             return
         }
 
-        val images = repositoriesFacade.getImages()
-        val genresResponse: List<GenresItem> = repositoriesFacade.getGenres()
+        val images = configurationRepository.getImages()
+        val genresResponse: List<GenresItem> = configurationRepository.getGenres()
 
         ImagesBaseUrl.IMAGES_BASE_URL = images.secureBaseUrl
         PosterSizeList.posterSizes = images.posterSizes
 
-        repositoriesFacade.setImagesEntity(
+        configurationRepository.setImagesEntity(
             ImagesEntity(
                 posterSizes = images.posterSizes,
                 secureBaseUrl = images.secureBaseUrl
@@ -95,8 +99,8 @@ class MoviesListViewModel(private val repositoriesFacade: RepositoriesFacadeInte
             GenresMap.genres[genre.id] = genre.name
             genresEntities.add(GenresEntity(id = genre.id.toLong(), name = genre.name))
         }
-        repositoriesFacade.setGenresEntities(genresEntities)
-        repositoriesFacade.setDateUpdateEntity(DateUpdateEntity(dateUpdate = Date()))
+        configurationRepository.setGenresEntities(genresEntities)
+        configurationRepository.setDateUpdateEntity(DateUpdateEntity(dateUpdate = Date()))
     }
 
     private fun loadMovies(sort: Category, isRefresh: Boolean) {
@@ -106,12 +110,12 @@ class MoviesListViewModel(private val repositoriesFacade: RepositoriesFacadeInte
 
         this.sort = sort
 
-        moviesResult = repositoriesFacade.getMovies(sort).cachedIn(viewModelScope)
-        moviesResult?.observeForever(observer)
+        moviesResult = moviesRepository.getMovies(sort).cachedIn(viewModelScope)
+        moviesResult?.observeForever(pagingObserver)
     }
 
     override fun onCleared() {
-        moviesResult?.removeObserver(observer)
+        moviesResult?.removeObserver(pagingObserver)
         super.onCleared()
     }
 }

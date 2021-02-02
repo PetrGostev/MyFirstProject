@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.data.worker
+package ru.petrgostev.myfirstproject.data.backgroundWorker
 
 import android.content.Context
 import android.util.Log
@@ -12,7 +12,7 @@ import ru.petrgostev.myfirstproject.data.repository.ConfigurationRepository
 import ru.petrgostev.myfirstproject.data.repository.IConfigurationRepository
 import ru.petrgostev.myfirstproject.di.App
 
-class MoviesWorker(
+class BackgroundWorker(
     context: Context,
     params: WorkerParameters,
 ) : CoroutineWorker(context, params) {

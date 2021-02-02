@@ -2,10 +2,9 @@ package ru.petrgostev.myfirstproject.data.network.pojo
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ru.petrgostev.myfirstproject.utils.Adult
-import ru.petrgostev.myfirstproject.utils.GenresMap
-import ru.petrgostev.myfirstproject.utils.ImagesBaseUrl
-import ru.petrgostev.myfirstproject.utils.PosterSizeEnum
+import ru.petrgostev.myfirstproject.data.dataBase.entity.MoviesEntity
+import ru.petrgostev.myfirstproject.ui.moviesList.MoviesViewItem
+import ru.petrgostev.myfirstproject.utils.*
 
 @Serializable
 class MoviesResponse(
@@ -62,4 +61,33 @@ data class MoviesItem(
 
         return genres.joinToString()
     }
+
+    fun toMoviesViewItem() = MoviesViewItem(
+        id = id,
+        overview = overview ?: "",
+        title = title ?: "",
+        popularity = popularity ?: 0.0,
+        voteAverage = voteAverage,
+        voteCount = voteCount ?: 0,
+        moviePoster = moviePoster,
+        rating_5 = rating_5,
+        minimumAge = minimumAge,
+        genre = getGenre()
+    )
+
+    fun toMoviesEntity(category: Category) = MoviesEntity(
+        id = id.toLong(),
+        overview = overview ?: "",
+        title = title ?: "",
+        popularity = popularity ?: 0.0,
+        voteAverage = voteAverage,
+        voteCount = voteCount ?: 0,
+        moviePoster = moviePoster,
+        rating_5 = rating_5,
+        minimumAge = minimumAge,
+        genre = getGenre(),
+        isPopular = category == Category.POPULAR,
+        isTopRated = category == Category.TOP_RATED,
+        isUpcoming = category == Category.UPCOMING,
+    )
 }

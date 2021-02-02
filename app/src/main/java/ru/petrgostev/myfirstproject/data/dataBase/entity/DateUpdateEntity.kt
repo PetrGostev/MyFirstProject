@@ -8,7 +8,7 @@ import java.util.*
 
 @Entity(tableName = "dateUpdate")
 class DateUpdateEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     val id: Long = 1,
 
     @TypeConverters(TimeConverter::class)

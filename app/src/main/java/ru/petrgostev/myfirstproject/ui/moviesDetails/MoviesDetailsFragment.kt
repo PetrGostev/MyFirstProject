@@ -8,24 +8,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.load
 import ru.petrgostev.myfirstproject.R
+import ru.petrgostev.myfirstproject.data.dataBase.MoviesDataBase
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesDetailsBinding
 import ru.petrgostev.myfirstproject.di.App
 import ru.petrgostev.myfirstproject.data.network.pojo.MovieDetailsResponse
 import ru.petrgostev.myfirstproject.data.repository.*
 
 class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
+    private val networkModule = App.component.getNetworkModule()
+    private val moviesDataBase = MoviesDataBase.INSTANCE
 
-    private val dataBaseRepository: DataBaseRepositoryInterface  by lazy { DataBaseRepository() }
-
-    private val networkRepository: NetworkRepositoryInterface by lazy {
-        NetworkRepository(
-            App.component.getNetworkModule(),
-            dataBaseRepository
-        )
-    }
+    private val moviesRepository: IMoviesRepository by lazy { MoviesRepository(networkModule, moviesDataBase.moviesDao()) }
 
     private val viewModel: MoviesDetailsViewModel by viewModels {
-        MoviesDetailsViewModelFactory(networkRepository)
+        MoviesDetailsViewModelFactory(moviesRepository)
     }
 
     private var viewBinding: FragmentMoviesDetailsBinding? = null

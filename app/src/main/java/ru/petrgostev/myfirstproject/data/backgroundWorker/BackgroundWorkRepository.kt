@@ -1,13 +1,13 @@
-package ru.petrgostev.myfirstproject.data.worker
+package ru.petrgostev.myfirstproject.data.backgroundWorker
 
 import androidx.work.*
 import java.util.concurrent.TimeUnit
 
-class MoviesWorkRepository() {
+class BackgroundWorkRepository() {
 
     private val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
 
-    val configurationRequest = PeriodicWorkRequestBuilder<MoviesWorker>(INTERVAL, TimeUnit.HOURS)
+    val configurationRequest = PeriodicWorkRequestBuilder<BackgroundWorker>(INTERVAL, TimeUnit.HOURS)
         .setConstraints(constraints)
         .setInitialDelay(INTERVAL, TimeUnit.HOURS)
         .build()

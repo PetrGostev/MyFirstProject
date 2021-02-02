@@ -13,23 +13,17 @@ import ru.petrgostev.myfirstproject.di.App
 @Database(
     entities = [ImagesEntity::class,
         GenresEntity::class, DateUpdateEntity::class,
-        FavouritesEntity::class,
-        PopularMoviesEntity::class,
-        TopRatingMoviesEntity::class,
-        UpcomingMoviesEntity::class],
+        MoviesEntity::class],
     exportSchema = false,
-    version = 2
+    version = 3
 )
 @TypeConverters(TimeConverter::class, ListConverter::class)
 abstract class MoviesDataBase : RoomDatabase() {
 
-    abstract fun configurationDao(): ImagesDao
+    abstract fun imagesDao(): ImagesDao
     abstract fun genresDao(): GenresDao
     abstract fun dateUpdateDao(): DateUpdateDao
-    abstract fun favouritesDao(): FavouritesDao
-    abstract fun popularMoviesDao(): PopularMoviesDao
-    abstract fun topRatingMoviesDao(): TopRatingMoviesDao
-    abstract fun upcomingMoviesDao(): UpcomingMoviesDao
+    abstract fun moviesDao(): MoviesDao
 
     companion object {
         private const val DB_NAME = "moviesDataBase"

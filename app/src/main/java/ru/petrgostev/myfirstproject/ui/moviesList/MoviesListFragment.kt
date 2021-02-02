@@ -15,26 +15,44 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.Router
-import ru.petrgostev.myfirstproject.data.repository.RepositoriesFacade
-import ru.petrgostev.myfirstproject.data.repository.RepositoriesFacadeInterface
+import ru.petrgostev.myfirstproject.data.dataBase.MoviesDataBase
+import ru.petrgostev.myfirstproject.data.repository.ConfigurationRepository
+import ru.petrgostev.myfirstproject.data.repository.IConfigurationRepository
+import ru.petrgostev.myfirstproject.data.repository.IMoviesRepository
+import ru.petrgostev.myfirstproject.data.repository.MoviesRepository
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesListBinding
 import ru.petrgostev.myfirstproject.ui.moviesList.adapter.MovieViewsAdapter
 import ru.petrgostev.myfirstproject.ui.moviesList.padding.adapter.MovieLoadStateAdapter
-import ru.petrgostev.myfirstproject.data.worker.MoviesWorkRepository
+import ru.petrgostev.myfirstproject.data.backgroundWorker.BackgroundWorkRepository
+import ru.petrgostev.myfirstproject.di.App
 import ru.petrgostev.myfirstproject.utils.*
 
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private val parentRouter: Router? by lazy { activity as? Router }
+    private val networkModule = App.component.getNetworkModule()
+    private val moviesDataBase = MoviesDataBase.INSTANCE
 
-    private val repositoriesFacade: RepositoriesFacadeInterface = RepositoriesFacade()
+    private val configurationRepository: IConfigurationRepository by lazy {
+        ConfigurationRepository(
+            networkModule, moviesDataBase.dateUpdateDao(),
+            moviesDataBase.imagesDao(),
+            moviesDataBase.genresDao()
+        )
+    }
+    private val moviesRepository: IMoviesRepository by lazy {
+        MoviesRepository(
+            networkModule,
+            moviesDataBase.moviesDao()
+        )
+    }
 
     private var moviesJob: Job? = null
 
-    private val workRepository = MoviesWorkRepository()
+    private val workRepository = BackgroundWorkRepository()
 
     private val viewModel: MoviesListViewModel by viewModels {
-        MoviesListViewModelFactory(repositoriesFacade)
+        MoviesListViewModelFactory(configurationRepository, moviesRepository)
     }
 
     private var viewBinding: FragmentMoviesListBinding? = null
@@ -78,14 +96,9 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
             footer = MovieLoadStateAdapter { adapter.retry() }
         )
         adapter.addLoadStateListener { loadState ->
-            // Показывать список только в том случае, если обновление прошло успешно.
-            viewBinding?.moviesRecycler?.isVisible =
-                loadState.source.refresh is LoadState.NotLoading
-            // Show loading  во время начальной загрузки или обновления.
+            viewBinding?.moviesRecycler?.isVisible = loadState.source.refresh is LoadState.NotLoading
             viewBinding?.loader?.isVisible = loadState.source.refresh is LoadState.Loading
-            // hide loading после обновления.
             viewBinding?.moviesSwipe?.isRefreshing = false
-            // Показывать состояние повтора, если начальная загрузка или обновление завершатся неудачно.
             viewBinding?.retryButton?.isVisible = loadState.source.refresh is LoadState.Error
 
             val errorState = loadState.source.append as? LoadState.Error

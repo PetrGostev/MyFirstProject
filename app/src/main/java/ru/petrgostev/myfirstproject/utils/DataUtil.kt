@@ -35,5 +35,5 @@ enum class PosterSizeEnum(val size: String?){
 }
 
 enum class Category {
-    POPULAR, TOP_RATED, UPCOMING
+    POPULAR, TOP_RATED, UPCOMING, FAVORITE
 }

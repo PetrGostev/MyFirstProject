@@ -9,8 +9,8 @@ import ru.petrgostev.myfirstproject.data.dataBase.entity.ImagesEntity
 @Dao
 interface ImagesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertConfiguration(images: ImagesEntity)
+    suspend fun insertImages(images: ImagesEntity)
 
     @Query("SELECT * FROM images")
-    suspend fun getConfiguration(): ImagesEntity
+    suspend fun getImages(): ImagesEntity
 }

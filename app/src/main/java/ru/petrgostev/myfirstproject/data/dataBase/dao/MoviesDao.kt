@@ -4,16 +4,16 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import ru.petrgostev.myfirstproject.data.dataBase.entity.PopularMoviesEntity
+import ru.petrgostev.myfirstproject.data.dataBase.entity.MoviesEntity
 
 @Dao
-interface PopularMoviesDao {
+interface MoviesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(images: List<PopularMoviesEntity>)
+    suspend fun insertAll(images: List<MoviesEntity>)
 
-    @Query("SELECT * FROM popularMovies")
-    suspend fun getAll(): List<PopularMoviesEntity>
+    @Query("SELECT * FROM movies")
+    suspend fun getAll(): List<MoviesEntity>
 
-    @Query("DELETE FROM popularMovies")
+    @Query("DELETE FROM movies")
     suspend fun clearAll()
 }
