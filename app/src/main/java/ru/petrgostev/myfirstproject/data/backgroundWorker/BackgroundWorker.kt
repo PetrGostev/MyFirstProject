@@ -5,16 +5,28 @@ import android.util.Log
 import androidx.work.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.petrgostev.myfirstproject.data.dataBase.MoviesDataBase
 import ru.petrgostev.myfirstproject.data.dataBase.entity.GenresEntity
 import ru.petrgostev.myfirstproject.data.dataBase.entity.ImagesEntity
-import ru.petrgostev.myfirstproject.data.repository.RepositoriesFacade
+import ru.petrgostev.myfirstproject.data.repository.ConfigurationRepository
+import ru.petrgostev.myfirstproject.data.repository.IConfigurationRepository
+import ru.petrgostev.myfirstproject.di.App
 
 class MoviesWorker(
     context: Context,
     params: WorkerParameters,
 ) : CoroutineWorker(context, params) {
 
-    private val repositoriesFacade = RepositoriesFacade()
+    private val networkModule = App.component.getNetworkModule()
+    private val moviesDataBase = MoviesDataBase.INSTANCE
+
+    private val configurationRepository: IConfigurationRepository by lazy {
+        ConfigurationRepository(
+            networkModule, moviesDataBase.dateUpdateDao(),
+            moviesDataBase.imagesDao(),
+            moviesDataBase.genresDao()
+        )
+    }
 
     override suspend fun doWork(): Result {
         return withContext(Dispatchers.IO) {
@@ -31,8 +43,8 @@ class MoviesWorker(
     }
 
     private suspend fun updateImages() {
-        val imagesResponse = repositoriesFacade.networkRepository.getImages()
-        repositoriesFacade.dataBaseRepository.setImages(
+        val imagesResponse = configurationRepository.getImages()
+        configurationRepository.setImagesEntity(
             ImagesEntity(
                 posterSizes = imagesResponse.posterSizes,
                 secureBaseUrl = imagesResponse.secureBaseUrl
@@ -41,12 +53,11 @@ class MoviesWorker(
     }
 
     private suspend fun updateGenres() {
-        val genresResponse = repositoriesFacade.dataBaseRepository.getGenres()
+        val genresResponse = configurationRepository.getGenres()
         val genresEntities = mutableListOf<GenresEntity>()
-        if (genresResponse != null) {
-            for (genre in genresResponse) {
-                genresEntities.add(GenresEntity(id = genre.id, name = genre.name))
-            }
+        for (genre in genresResponse) {
+            genresEntities.add(GenresEntity(id = genre.id.toLong(), name = genre.name))
         }
+        configurationRepository.setGenresEntities(genresEntities)
     }
 }

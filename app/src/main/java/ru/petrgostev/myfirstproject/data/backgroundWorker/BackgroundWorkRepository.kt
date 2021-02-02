@@ -1,7 +1,6 @@
 package ru.petrgostev.myfirstproject.data.worker
 
 import androidx.work.*
-import ru.petrgostev.myfirstproject.data.repository.RepositoriesFacade
 import java.util.concurrent.TimeUnit
 
 class MoviesWorkRepository() {
