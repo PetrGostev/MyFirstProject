@@ -1,13 +1,12 @@
 package ru.petrgostev.myfirstproject.ui.moviesList.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import ru.petrgostev.myfirstproject.data.network.pojo.MoviesItem
-import ru.petrgostev.myfirstproject.ui.moviesList.MoviesViewItem
+import ru.petrgostev.myfirstproject.data.dataBase.entity.MoviesEntity
 
-class MovieDiffUtilCallback : DiffUtil.ItemCallback<MoviesViewItem>(){
-    override fun areItemsTheSame(oldItem: MoviesViewItem, newItem: MoviesViewItem): Boolean {
+class MovieDiffUtilCallback : DiffUtil.ItemCallback<MoviesEntity>(){
+    override fun areItemsTheSame(oldItem: MoviesEntity, newItem: MoviesEntity): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: MoviesViewItem, newItem: MoviesViewItem): Boolean = oldItem == newItem
+    override fun areContentsTheSame(oldItem: MoviesEntity, newItem: MoviesEntity): Boolean = oldItem == newItem
 }

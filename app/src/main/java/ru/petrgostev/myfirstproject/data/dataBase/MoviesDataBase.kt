@@ -15,7 +15,7 @@ import ru.petrgostev.myfirstproject.di.App
         GenresEntity::class, DateUpdateEntity::class,
         MoviesEntity::class],
     exportSchema = false,
-    version = 3
+    version = 2
 )
 @TypeConverters(TimeConverter::class, ListConverter::class)
 abstract class MoviesDataBase : RoomDatabase() {

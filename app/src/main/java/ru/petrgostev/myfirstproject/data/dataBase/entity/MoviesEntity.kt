@@ -2,10 +2,9 @@ package ru.petrgostev.myfirstproject.data.dataBase.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.petrgostev.myfirstproject.ui.moviesList.MoviesViewItem
 
 @Entity(tableName = "movies")
-class MoviesEntity(
+data class MoviesEntity(
     @PrimaryKey
     val id: Long,
     val overview: String,
@@ -20,17 +19,4 @@ class MoviesEntity(
     val isPopular: Boolean,
     val isTopRated: Boolean,
     val isUpcoming: Boolean,
-) {
-    fun toMoviesViewItem() = MoviesViewItem(
-        id.toInt(),
-        overview,
-        title,
-        popularity,
-        voteAverage,
-        voteCount,
-        moviePoster,
-        rating_5,
-        minimumAge,
-        genre
-    )
-}
+)

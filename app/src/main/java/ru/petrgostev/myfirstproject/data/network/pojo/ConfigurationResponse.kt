@@ -2,6 +2,7 @@ package ru.petrgostev.myfirstproject.data.network.pojo
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import ru.petrgostev.myfirstproject.data.dataBase.entity.ImagesEntity
 
 @Serializable
 class ConfigurationResponse(
@@ -18,4 +19,6 @@ class ImagesResponse(
 
     @SerialName("secure_base_url")
     val secureBaseUrl: String,
-)
+){
+    fun toImagesEntity() = ImagesEntity(posterSizes = posterSizes, secureBaseUrl = secureBaseUrl)
+}

@@ -24,6 +24,7 @@ import ru.petrgostev.myfirstproject.databinding.FragmentMoviesListBinding
 import ru.petrgostev.myfirstproject.ui.moviesList.adapter.MovieViewsAdapter
 import ru.petrgostev.myfirstproject.ui.moviesList.padding.adapter.MovieLoadStateAdapter
 import ru.petrgostev.myfirstproject.data.backgroundWorker.BackgroundWorkRepository
+import ru.petrgostev.myfirstproject.data.dataBase.entity.MoviesEntity
 import ru.petrgostev.myfirstproject.di.App
 import ru.petrgostev.myfirstproject.utils.*
 
@@ -56,11 +57,11 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     }
 
     private var viewBinding: FragmentMoviesListBinding? = null
-    private var sort: Category = Category.POPULAR
+    private var category: Category = Category.POPULAR
 
     private val adapter: MovieViewsAdapter by lazy {
-        MovieViewsAdapter { movie: MoviesViewItem ->
-            movie.id.let { parentRouter?.openMoviesDetailsFragment(it) }
+        MovieViewsAdapter { movie: MoviesEntity ->
+            movie.id.let { parentRouter?.openMoviesDetailsFragment(it.toInt()) }
         }
     }
 
@@ -115,7 +116,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         }
     }
 
-    private fun updateAdapter(movies: PagingData<MoviesViewItem>) {
+    private fun updateAdapter(movies: PagingData<MoviesEntity>) {
         moviesJob?.cancel()
         moviesJob = lifecycleScope.launch {
             adapter.submitData(movies)
@@ -129,7 +130,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
             moviesSwipe.setOnRefreshListener {
                 if (Connect.isConnected) {
-                    viewModel.getData(sort = sort, isRefresh = true)
+                    viewModel.getData(category = category, isRefresh = true)
                 } else {
                     moviesSwipe.isRefreshing = false
                     ToastUtil.showToastNotConnected(requireContext())
@@ -151,9 +152,9 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                     id: Long
                 ) {
                     when (position) {
-                        POSITION_POPULAR -> sort = Category.POPULAR
-                        POSITION_TOP_RATED -> sort = Category.TOP_RATED
-                        POSITION_UPCOMING -> sort = Category.UPCOMING
+                        POSITION_POPULAR -> category = Category.POPULAR
+                        POSITION_TOP_RATED -> category = Category.TOP_RATED
+                        POSITION_UPCOMING -> category = Category.UPCOMING
                     }
 
                     if (!Connect.isConnected) {
@@ -162,7 +163,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
                         return
                     }
 
-                    viewModel.getData(sort = sort, isRefresh = false)
+                    viewModel.getData(category = category, isRefresh = false)
                 }
             }
         }

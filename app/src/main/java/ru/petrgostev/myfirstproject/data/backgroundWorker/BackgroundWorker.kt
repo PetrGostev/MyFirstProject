@@ -31,8 +31,7 @@ class BackgroundWorker(
     override suspend fun doWork(): Result {
         return withContext(Dispatchers.IO) {
             try {
-                updateImages()
-                updateGenres()
+                configurationRepository.checkUpdateDate()
 
                 Result.success()
             } catch (e: Exception) {
@@ -40,24 +39,5 @@ class BackgroundWorker(
                 Result.failure()
             }
         }
-    }
-
-    private suspend fun updateImages() {
-        val imagesResponse = configurationRepository.getImages()
-        configurationRepository.setImagesEntity(
-            ImagesEntity(
-                posterSizes = imagesResponse.posterSizes,
-                secureBaseUrl = imagesResponse.secureBaseUrl
-            )
-        )
-    }
-
-    private suspend fun updateGenres() {
-        val genresResponse = configurationRepository.getGenres()
-        val genresEntities = mutableListOf<GenresEntity>()
-        for (genre in genresResponse) {
-            genresEntities.add(GenresEntity(id = genre.id.toLong(), name = genre.name))
-        }
-        configurationRepository.setGenresEntities(genresEntities)
     }
 }

@@ -8,7 +8,6 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import kotlinx.coroutines.*
 import ru.petrgostev.myfirstproject.data.dataBase.entity.*
-import ru.petrgostev.myfirstproject.data.network.pojo.GenresItem
 import ru.petrgostev.myfirstproject.data.repository.IConfigurationRepository
 import ru.petrgostev.myfirstproject.data.repository.IMoviesRepository
 import ru.petrgostev.myfirstproject.utils.*
@@ -20,15 +19,15 @@ class MoviesListViewModel(
 ) : ViewModel() {
 
     private val _mutableIsConnected = MutableLiveData<Boolean>(true)
-    private val _mutableMoviesPagingList = MutableLiveData<PagingData<MoviesViewItem>>()
+    private val _mutableMoviesPagingList = MutableLiveData<PagingData<MoviesEntity>>()
 
     val isConnected: LiveData<Boolean> get() = _mutableIsConnected
-    val moviesPagingList: LiveData<PagingData<MoviesViewItem>> get() = _mutableMoviesPagingList
+    val moviesPagingList: LiveData<PagingData<MoviesEntity>> get() = _mutableMoviesPagingList
 
-    private var sort: Category = Category.POPULAR
-    private var moviesResult: LiveData<PagingData<MoviesViewItem>>? = null
+    private var mCategory: Category = Category.POPULAR
+    private var moviesResult: LiveData<PagingData<MoviesEntity>>? = null
 
-    private val pagingObserver = Observer<PagingData<MoviesViewItem>> {
+    private val pagingObserver = Observer<PagingData<MoviesEntity>> {
         _mutableMoviesPagingList.postValue(it)
     }
 
@@ -39,78 +38,27 @@ class MoviesListViewModel(
         }
     }
 
-    fun getData(sort: Category, isRefresh: Boolean) {
+    fun getData(category: Category, isRefresh: Boolean) {
         viewModelScope.launch(exceptionHandler) {
-            loadConfiguration(sort, isRefresh)
+            loadConfiguration(category, isRefresh)
         }
     }
 
-    private suspend fun loadConfiguration(sort: Category, isRefresh: Boolean) {
+    private suspend fun loadConfiguration(category: Category, isRefresh: Boolean) {
         viewModelScope.launch {
-            checkUpdateDate()
-            loadImagesAndGenres()
-            loadMovies(sort, isRefresh)
+            configurationRepository.checkUpdateDate()
+            loadMovies(category, isRefresh)
         }
     }
 
-    private suspend fun checkUpdateDate() {
-        val updateDate = configurationRepository.getDateUpdateEntity()?.dateUpdate
-        if (updateDate != null) {
-            MoviesDate.IS_RELEVANT_UPDATE_DATE =
-                MoviesDate.FORMAT_DATE.format(updateDate) == MoviesDate.FORMAT_DATE.format(Date())
-        }
-    }
-
-    private suspend fun loadImagesAndGenres() {
-        val imagesEntity = configurationRepository.getImagesEntity()
-        val genres: List<GenresEntity>? = configurationRepository.getGenresEntities()
-
-        if (imagesEntity != null && genres != null) {
-
-            if (ImagesBaseUrl.IMAGES_BASE_URL.isEmpty()) {
-                ImagesBaseUrl.IMAGES_BASE_URL = imagesEntity.secureBaseUrl ?: ""
-            }
-            if (PosterSizeList.posterSizes.isEmpty()) {
-                PosterSizeList.posterSizes = imagesEntity.posterSizes
-            }
-
-            for (genre in genres) {
-                GenresMap.genres[genre.id.toInt()] = genre.name
-            }
+    private fun loadMovies(category: Category, isRefresh: Boolean) {
+        if (moviesResult != null && this.mCategory == category && !isRefresh) {
             return
         }
 
-        val images = configurationRepository.getImages()
-        val genresResponse: List<GenresItem> = configurationRepository.getGenres()
+        this.mCategory = category
 
-        ImagesBaseUrl.IMAGES_BASE_URL = images.secureBaseUrl
-        PosterSizeList.posterSizes = images.posterSizes
-
-        configurationRepository.setImagesEntity(
-            ImagesEntity(
-                posterSizes = images.posterSizes,
-                secureBaseUrl = images.secureBaseUrl
-            )
-        )
-
-        val genresEntities: MutableList<GenresEntity> = mutableListOf()
-
-        for (genre in genresResponse) {
-            GenresMap.genres[genre.id] = genre.name
-            genresEntities.add(GenresEntity(id = genre.id.toLong(), name = genre.name))
-        }
-        configurationRepository.setGenresEntities(genresEntities)
-        configurationRepository.setDateUpdateEntity(DateUpdateEntity(dateUpdate = Date()))
-    }
-
-    private fun loadMovies(sort: Category, isRefresh: Boolean) {
-        if (moviesResult != null && this.sort == sort && !isRefresh) {
-            return
-        }
-
-        this.sort = sort
-
-        moviesResult = moviesRepository.getMovies(sort).cachedIn(viewModelScope)
+        moviesResult = moviesRepository.getMovies(category).cachedIn(viewModelScope)
         moviesResult?.observeForever(pagingObserver)
     }
 

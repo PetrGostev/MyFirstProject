@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.aids61517.easyratingview.EasyRatingView
 import ru.petrgostev.myfirstproject.R
-import ru.petrgostev.myfirstproject.data.network.pojo.MoviesItem
-import ru.petrgostev.myfirstproject.ui.moviesList.MoviesViewItem
+import ru.petrgostev.myfirstproject.data.dataBase.entity.MoviesEntity
 
 class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -19,7 +18,7 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val movieReviewsQuantity: TextView = itemView.findViewById(R.id.movie_reviews_quantity)
     private val movieTitle: TextView = itemView.findViewById(R.id.movie_title)
 
-    fun onBind(moviesItem: MoviesViewItem) {
+    fun onBind(moviesItem: MoviesEntity) {
 
         movieImagePoster.load(moviesItem.moviePoster) {
             crossfade(false)
