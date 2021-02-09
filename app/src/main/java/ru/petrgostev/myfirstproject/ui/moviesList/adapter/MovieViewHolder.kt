@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.aids61517.easyratingview.EasyRatingView
 import ru.petrgostev.myfirstproject.R
-import ru.petrgostev.myfirstproject.data.network.pojo.MoviesItem
+import ru.petrgostev.myfirstproject.data.dataBase.entity.MoviesEntity
 
 class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -18,7 +18,7 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val movieReviewsQuantity: TextView = itemView.findViewById(R.id.movie_reviews_quantity)
     private val movieTitle: TextView = itemView.findViewById(R.id.movie_title)
 
-    fun onBind(moviesItem: MoviesItem) {
+    fun onBind(moviesItem: MoviesEntity) {
 
         movieImagePoster.load(moviesItem.moviePoster) {
             crossfade(false)
@@ -27,7 +27,7 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         movieAgeLimit.text = itemView.context.getString(R.string.age_limit, moviesItem.minimumAge)
         //TODO 01: movieLike.setImageResource(resId)
-        movieGenres.text = moviesItem.genre().toString()
+        movieGenres.text = moviesItem.genre
         movieRating.rating = moviesItem.rating_5
         movieReviewsQuantity.text = itemView.context.getString(R.string.reviews_quantity, moviesItem.voteCount)
         movieTitle.text = moviesItem.title

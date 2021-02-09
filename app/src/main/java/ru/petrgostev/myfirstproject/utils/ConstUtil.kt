@@ -22,6 +22,8 @@ object Adult{
     const val NOT_ADULT= 0
 }
 
-object PageSize{
-    var PAGE_SIZE = 120
+object Page{
+    var PAGE_SIZE = 20
+    var STARTING_PAGE = 1
+    var TWO_PAGE = 2
 }

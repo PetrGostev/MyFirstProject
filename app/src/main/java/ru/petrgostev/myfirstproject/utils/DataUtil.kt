@@ -15,7 +15,8 @@ object ImagesBaseUrl {
     var IMAGES_BASE_URL = ""
 }
 
-object FormatDate {
+object MoviesDate {
+    var IS_RELEVANT_UPDATE_DATE = false
     val FORMAT_DATE = SimpleDateFormat(DateFormat.DATE_FORMAT, Locale(Language.LANGUAGE_RU))
 }
 
@@ -34,5 +35,5 @@ enum class PosterSizeEnum(val size: String?){
 }
 
 enum class Category {
-    POPULAR, TOP_RATED, UPCOMING
+    POPULAR, TOP_RATED, UPCOMING, FAVORITE
 }

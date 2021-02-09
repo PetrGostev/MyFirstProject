@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.petrgostev.myfirstproject.data.network.pojo.MovieDetailsResponse
-import ru.petrgostev.myfirstproject.data.repository.NetworkRepositoryInterface
+import ru.petrgostev.myfirstproject.data.repository.IMoviesRepository
 
-class MoviesDetailsViewModel(private val networkRepository: NetworkRepositoryInterface) : ViewModel() {
+class MoviesDetailsViewModel(private val moviesRepository: IMoviesRepository) : ViewModel() {
 
     private val _mutableMovie = MutableLiveData<MovieDetailsResponse>()
     val movie: LiveData<MovieDetailsResponse> get() = _mutableMovie
@@ -16,7 +16,7 @@ class MoviesDetailsViewModel(private val networkRepository: NetworkRepositoryInt
     fun loadMovie(movieId: Int) {
         viewModelScope.launch() {
             val moviesResponse =
-                networkRepository.getMovie(movieId)
+                moviesRepository.getMovie(movieId)
             _mutableMovie.postValue(moviesResponse)
         }
     }

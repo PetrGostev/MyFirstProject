@@ -2,10 +2,8 @@ package ru.petrgostev.myfirstproject.data.network.pojo
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ru.petrgostev.myfirstproject.utils.Adult
-import ru.petrgostev.myfirstproject.utils.GenresMap
-import ru.petrgostev.myfirstproject.utils.ImagesBaseUrl
-import ru.petrgostev.myfirstproject.utils.PosterSizeEnum
+import ru.petrgostev.myfirstproject.data.dataBase.entity.MoviesEntity
+import ru.petrgostev.myfirstproject.utils.*
 
 @Serializable
 class MoviesResponse(
@@ -42,7 +40,7 @@ data class MoviesItem(
     val voteAverage: Double = 0.0,
 
     @SerialName("id")
-    val id: Int?,
+    val id: Int,
 
     @SerialName("adult")
     val adult: Boolean,
@@ -53,11 +51,29 @@ data class MoviesItem(
     val moviePoster:String = ImagesBaseUrl.IMAGES_BASE_URL + PosterSizeEnum.W500.size + posterPath
     val rating_5: Float = (voteAverage / 2).toFloat()
     val minimumAge: Int = if (adult) Adult.ADULT else Adult.NOT_ADULT
-    val genre: () -> String = {
+
+    fun getGenre(): String {
         val genres = mutableListOf<String>()
         genreIds?.forEach {
             genres.add(GenresMap.genres.getValue(it))
         }
-        genres.joinToString()
+
+        return genres.joinToString()
     }
+
+    fun toMoviesEntity(category: Category) = MoviesEntity(
+        id = id.toLong(),
+        overview = overview.orEmpty(),
+        title = title.orEmpty(),
+        popularity = popularity ?: 0.0,
+        voteAverage = voteAverage,
+        voteCount = voteCount ?: 0,
+        moviePoster = moviePoster,
+        rating_5 = rating_5,
+        minimumAge = minimumAge,
+        genre = getGenre(),
+        isPopular = category == Category.POPULAR,
+        isTopRated = category == Category.TOP_RATED,
+        isUpcoming = category == Category.UPCOMING,
+    )
 }

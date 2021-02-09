@@ -9,7 +9,7 @@ import java.util.*
 @Entity(tableName = "dateUpdate")
 class DateUpdateEntity(
     @PrimaryKey
-    val id: Long = 1,
+    val id: Long,
 
     @TypeConverters(TimeConverter::class)
     val dateUpdate: Date
