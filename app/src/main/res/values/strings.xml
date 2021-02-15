@@ -16,6 +16,11 @@
     <string name="restart_text">Restart</string>
     <string name="cancel_text">Cancel</string>
 
+    <string name="channel_new_movies">New movies</string>
+    <string name="channel_new_movies_description">All new  highest rating movies.</string>
+
+    <string name="film_high_rating">Фильм с высоким рейтингом!</string>
+
     <string-array name="spinner_items">
         <item>popular</item>
         <item>rated</item>

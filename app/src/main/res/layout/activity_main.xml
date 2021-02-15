@@ -8,6 +8,7 @@
         android:id="@+id/fame"
         android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:background="@drawable/app_fon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

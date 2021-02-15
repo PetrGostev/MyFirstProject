@@ -18,7 +18,13 @@ class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
     private val networkModule = App.component.getNetworkModule()
     private val moviesDataBase = MoviesDataBase.INSTANCE
 
-    private val moviesRepository: IMoviesRepository by lazy { MoviesRepository(networkModule, moviesDataBase.moviesDao()) }
+    private val moviesRepository: IMoviesRepository by lazy {
+        MoviesRepository.getInstance(
+            requireContext(),
+            networkModule,
+            moviesDataBase.moviesDao()
+        )
+    }
 
     private val viewModel: MoviesDetailsViewModel by viewModels {
         MoviesDetailsViewModelFactory(moviesRepository)
