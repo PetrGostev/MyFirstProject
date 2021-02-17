@@ -19,7 +19,7 @@ class MovieDetailsResponse(
     val title: String,
 
     @SerialName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
 
     @SerialName("genres")
     val genres: List<GenresItem>,

@@ -42,7 +42,8 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         )
     }
     private val moviesRepository: IMoviesRepository by lazy {
-        MoviesRepository(
+        MoviesRepository.getInstance(
+            requireContext(),
             networkModule,
             moviesDataBase.moviesDao()
         )

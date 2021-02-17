@@ -1,9 +1,12 @@
 package ru.petrgostev.myfirstproject
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.commit
 import ru.petrgostev.myfirstproject.ui.moviesDetails.MoviesDetailsFragment
 import ru.petrgostev.myfirstproject.ui.moviesList.MoviesListFragment
 import ru.petrgostev.myfirstproject.utils.*
@@ -20,6 +23,7 @@ class MainActivity : AppCompatActivity(), Router {
 
         if (savedInstanceState == null) {
             openMoviesListFragment()
+            intent?.let(::openMoviesDetailsFragmentFromIntent)
         }
     }
 
@@ -33,20 +37,41 @@ class MainActivity : AppCompatActivity(), Router {
         networkMonitor.unregister()
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        openMoviesDetailsFragmentFromIntent(intent)
+    }
+
     override fun openMoviesDetailsFragment(movieId: Int) {
         if (!Connect.isConnected) {
             ToastUtil.showToastNotConnected(this)
             return
         }
 
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fame, MoviesDetailsFragment.newInstance(movieId))
-            .addToBackStack(MoviesDetailsFragment::class.java.name)
-            .commit()
+        Handler().postDelayed({
+            supportFragmentManager.popBackStack(
+                FRAGMENT_MOVIE,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
+            supportFragmentManager.commit {
+                addToBackStack(FRAGMENT_MOVIE)
+                replace(R.id.fame, MoviesDetailsFragment.newInstance(movieId))
+            }
+        }, DURATION_FOR_MOVIE)
+    }
+
+    private fun openMoviesDetailsFragmentFromIntent(intent: Intent?) {
+        intent?.let {
+            val id = intent.data?.lastPathSegment?.toLongOrNull()
+            id?.let { openMoviesDetailsFragment(id.toInt()) }
+        }
     }
 
     private fun openMoviesListFragment() {
-        // Делаем задержку, чтобы успело провериться подключение
+        if (!Connect.isConnected) {
+            showNetworkErrorDialog()
+            return
+        }
         Handler().postDelayed({
             if (Connect.isConnected) {
                 supportFragmentManager.beginTransaction()
@@ -55,7 +80,7 @@ class MainActivity : AppCompatActivity(), Router {
             } else {
                 showNetworkErrorDialog()
             }
-        }, DURATION)
+        }, DURATION_FOR_LIST_MOVIES)
     }
 
     private fun initNetworkMonitor() {
@@ -88,6 +113,8 @@ class MainActivity : AppCompatActivity(), Router {
         .create().show()
 
     companion object {
-        private const val DURATION:Long = 200
+        private const val DURATION_FOR_LIST_MOVIES: Long = 200
+        private const val DURATION_FOR_MOVIE: Long = 400
+        private const val FRAGMENT_MOVIE = "movie"
     }
 }
