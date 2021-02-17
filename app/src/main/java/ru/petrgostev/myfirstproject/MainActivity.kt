@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity(), Router {
 
         if (savedInstanceState == null) {
             openMoviesListFragment()
-            intent?.let(::handleIntent)
+            intent?.let(::openMoviesDetailsFragmentFromIntent)
         }
     }
 
@@ -39,9 +39,7 @@ class MainActivity : AppCompatActivity(), Router {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if (intent != null) {
-            handleIntent(intent)
-        }
+        openMoviesDetailsFragmentFromIntent(intent)
     }
 
     override fun openMoviesDetailsFragment(movieId: Int) {
@@ -62,14 +60,10 @@ class MainActivity : AppCompatActivity(), Router {
         }, DURATION_FOR_MOVIE)
     }
 
-    private fun handleIntent(intent: Intent) {
-        when (intent.action) {
-            Intent.ACTION_VIEW -> {
-                val id = intent.data?.lastPathSegment?.toLongOrNull()
-                if (id != null) {
-                    openMoviesDetailsFragment(id.toInt())
-                }
-            }
+    private fun openMoviesDetailsFragmentFromIntent(intent: Intent?) {
+        intent?.let {
+            val id = intent.data?.lastPathSegment?.toLongOrNull()
+            id?.let { openMoviesDetailsFragment(id.toInt()) }
         }
     }
 
@@ -79,13 +73,13 @@ class MainActivity : AppCompatActivity(), Router {
             return
         }
         Handler().postDelayed({
-        if (Connect.isConnected) {
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fame, MoviesListFragment())
-                .commit()
-        } else {
-            showNetworkErrorDialog()
-        }
+            if (Connect.isConnected) {
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.fame, MoviesListFragment())
+                    .commit()
+            } else {
+                showNetworkErrorDialog()
+            }
         }, DURATION_FOR_LIST_MOVIES)
     }
 
