@@ -9,7 +9,7 @@
     android:layout_gravity="center"
     android:layout_marginBottom="@dimen/space_2x"
     android:transitionGroup="true"
-    android:transitionName="@{@string/shared_movie(movieId)}"
+    android:transitionName="@string/shared_movie"
     android:background="@drawable/vector_bg">
 
     <ProgressBar

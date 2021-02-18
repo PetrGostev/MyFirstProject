@@ -3,6 +3,7 @@ package ru.petrgostev.myfirstproject.ui.moviesList.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.paging.PagingDataAdapter
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.data.dataBase.entity.MoviesEntity
@@ -23,6 +24,7 @@ class MovieViewsAdapter(private val clickListener: (view: View, moviesViewItem: 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         getItem(position)?.let { holder.onBind(it) }
         holder.itemView.setOnClickListener {
+            ViewCompat.setTransitionName(it, "${position}_image")
             getItem(position)?.let { item -> clickListener(it, item) }
         }
     }

@@ -1,22 +1,19 @@
 package ru.petrgostev.myfirstproject.ui.moviesDetails
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.core.view.doOnPreDraw
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.load
-import com.google.android.material.transition.MaterialContainerTransform
-import com.google.android.material.transition.MaterialElevationScale
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.data.dataBase.MoviesDataBase
+import ru.petrgostev.myfirstproject.data.network.pojo.MovieDetailsResponse
+import ru.petrgostev.myfirstproject.data.repository.IMoviesRepository
+import ru.petrgostev.myfirstproject.data.repository.MoviesRepository
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesDetailsBinding
 import ru.petrgostev.myfirstproject.di.App
-import ru.petrgostev.myfirstproject.data.network.pojo.MovieDetailsResponse
-import ru.petrgostev.myfirstproject.data.repository.*
 
 class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
     private val networkModule = App.component.getNetworkModule()
@@ -38,23 +35,7 @@ class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewBinding = FragmentMoviesDetailsBinding.bind(view)
-
-//        sharedElementEnterTransition = MaterialContainerTransform().apply {
-//            drawingViewId = R.id.nav_host_fragment_container
-//            duration = 2000
-//            scrimColor = Color.TRANSPARENT
-//            setAllContainerColors(Color.BLACK)
-//        }
-
-//        sharedElementReturnTransition = MaterialContainerTransform()
-//            .apply {
-//                duration = 2000
-//                scrimColor = Color.TRANSPARENT
-//                setAllContainerColors(Color.BLACK)
-//            }
-
         viewModel.movie.observe(this.viewLifecycleOwner, this::setupMovie)
     }
 
