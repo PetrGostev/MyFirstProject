@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import ru.petrgostev.myfirstproject.ui.moviesDetails.MoviesDetailsFragment
 import ru.petrgostev.myfirstproject.ui.moviesList.MoviesListFragment
 import ru.petrgostev.myfirstproject.utils.*
@@ -53,6 +54,7 @@ class MainActivity : AppCompatActivity(), Router {
                 FRAGMENT_MOVIE,
                 FragmentManager.POP_BACK_STACK_INCLUSIVE
             )
+
             supportFragmentManager.commit {
                 addToBackStack(FRAGMENT_MOVIE)
                 replace(R.id.fame, MoviesDetailsFragment.newInstance(movieId))
@@ -72,15 +74,11 @@ class MainActivity : AppCompatActivity(), Router {
             showNetworkErrorDialog()
             return
         }
-        Handler().postDelayed({
-            if (Connect.isConnected) {
+//        Handler().postDelayed({
                 supportFragmentManager.beginTransaction()
                     .add(R.id.fame, MoviesListFragment())
                     .commit()
-            } else {
-                showNetworkErrorDialog()
-            }
-        }, DURATION_FOR_LIST_MOVIES)
+//        }, DURATION_FOR_LIST_MOVIES)
     }
 
     private fun initNetworkMonitor() {

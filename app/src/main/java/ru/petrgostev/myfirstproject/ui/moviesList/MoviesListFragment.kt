@@ -1,18 +1,29 @@
 package ru.petrgostev.myfirstproject.ui.moviesList
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.transition.TransitionInflater
 import androidx.work.WorkManager
+import com.google.android.material.transition.MaterialContainerTransform
+import com.google.android.material.transition.MaterialElevationScale
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import ru.petrgostev.myfirstproject.MainActivity
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.Router
 import ru.petrgostev.myfirstproject.data.dataBase.MoviesDataBase
@@ -26,6 +37,7 @@ import ru.petrgostev.myfirstproject.ui.moviesList.padding.adapter.MovieLoadState
 import ru.petrgostev.myfirstproject.data.backgroundWorker.BackgroundWorkRepository
 import ru.petrgostev.myfirstproject.data.dataBase.entity.MoviesEntity
 import ru.petrgostev.myfirstproject.di.App
+import ru.petrgostev.myfirstproject.ui.moviesDetails.MoviesDetailsFragment
 import ru.petrgostev.myfirstproject.utils.*
 
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
@@ -59,11 +71,13 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
     private var viewBinding: FragmentMoviesListBinding? = null
     private var category: Category = Category.POPULAR
+    private var positionAdapterView: View? = null
 
     private val adapter: MovieViewsAdapter by lazy {
-        MovieViewsAdapter { movie: MoviesEntity ->
-            movie.id.let { parentRouter?.openMoviesDetailsFragment(it.toInt()) }
-        }
+        MovieViewsAdapter(fun(view: View, movie: MoviesEntity) {
+            positionAdapterView = view
+            movie.id.let { openMoviesDetailsFragment(it.toInt()) }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,6 +87,13 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         viewModel.moviesPagingList.observe(this.viewLifecycleOwner, {
             this.updateAdapter(it)
         })
+
+        exitTransition = MaterialElevationScale(false).apply { duration = 500 }
+//        reenterTransition = MaterialElevationScale(true).apply { duration = 500 }
+
+//        postponeEnterTransition()
+//        view.doOnPreDraw { startPostponedEnterTransition() }
+
 
         WorkManager.getInstance(requireContext()).enqueue(workRepository.configurationRequest)
     }
@@ -177,11 +198,44 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         }
     }
 
+    private fun openMoviesDetailsFragment(movieId: Int) {
+        if (!Connect.isConnected) {
+            ToastUtil.showToastNotConnected(requireContext())
+            return
+        }
+
+        val moviesDetailsFragment = MoviesDetailsFragment.newInstance(movieId)
+        moviesDetailsFragment.sharedElementEnterTransition = MaterialContainerTransform().apply {
+//            drawingViewId = R.id.nav_host_fragment_container
+            duration = 2000
+            scrimColor = Color.TRANSPARENT
+            setAllContainerColors(Color.BLACK)
+        }
+        moviesDetailsFragment.sharedElementReturnTransition = MaterialContainerTransform().apply {
+                duration = 500
+                scrimColor = Color.TRANSPARENT
+                setAllContainerColors(Color.BLACK)
+            }
+
+        positionAdapterView?.let {
+            val view: ViewGroup = it as ViewGroup
+            val name = requireActivity().getString(R.string.shared_movie)
+
+            requireActivity().supportFragmentManager.commit {
+                addSharedElement(view, name)
+                replace(R.id.fame, moviesDetailsFragment, FRAGMENT_MOVIE)
+                addToBackStack(FRAGMENT_MOVIE)
+            }
+
+        }
+    }
+
     companion object {
         private const val DISTANCE_TRIGGER = 10
         private const val POSITION_POPULAR = 0
         private const val POSITION_TOP_RATED = 1
         private const val POSITION_UPCOMING = 2
-
+        private const val FRAGMENT_MOVIE = "movie"
+        private const val MOVIE_ID = "movieId"
     }
 }

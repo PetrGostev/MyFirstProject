@@ -101,6 +101,7 @@
             android:id="@+id/movies_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:transitionGroup="true"
             android:padding="@dimen/item_offset"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
