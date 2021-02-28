@@ -14,6 +14,8 @@ import ru.petrgostev.myfirstproject.utils.ConnectionType
 import ru.petrgostev.myfirstproject.utils.NetworkMonitorUtil
 import ru.petrgostev.myfirstproject.utils.ToastUtil
 
+private const val DURATION_FOR_MOVIE: Long = 400
+
 class MainActivity : AppCompatActivity(), Router {
 
     private val networkMonitor = NetworkMonitorUtil(this)
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity(), Router {
         openMoviesDetailsFragmentFromIntent(intent)
     }
 
-    override fun openMoviesDetailsFragment(view: View, movieId: Int) {
+    override fun openMoviesDetailsFragment(view: View?, movieId: Int) {
         if (!Connect.isConnected) {
             ToastUtil.showToastNotConnected(this)
             return
@@ -53,11 +55,11 @@ class MainActivity : AppCompatActivity(), Router {
 
         val moviesDetailsFragment = MoviesDetailsFragment.newInstance(movieId).apply {
             sharedElementEnterTransition = DetailsTransition()
-            sharedElementReturnTransition = Slide()
+            sharedElementReturnTransition = ListTransition()
         }
 
         supportFragmentManager.commit {
-            addSharedElement(view, getString(R.string.shared_movie))
+            view?.let { addSharedElement(it, getString(R.string.shared_movie)) }
             replace(R.id.fame, moviesDetailsFragment)
             addToBackStack(null)
         }
@@ -66,7 +68,7 @@ class MainActivity : AppCompatActivity(), Router {
     private fun openMoviesDetailsFragmentFromIntent(intent: Intent?) {
         intent?.let {
             val id = intent.data?.lastPathSegment?.toLongOrNull()
-//            id?.let { openMoviesDetailsFragment(view, id.toInt()) }
+            id?.let { openMoviesDetailsFragment(null, id.toInt()) }
         }
     }
 
@@ -111,7 +113,6 @@ class MainActivity : AppCompatActivity(), Router {
 
     companion object {
         private const val DURATION_FOR_LIST_MOVIES: Long = 200
-        private const val DURATION_FOR_MOVIE: Long = 400
         private const val FRAGMENT_MOVIE = "movie"
     }
 }
@@ -123,5 +124,15 @@ class DetailsTransition : TransitionSet() {
         addTransition(ChangeBounds())
             .addTransition(ChangeTransform())
             .addTransition(ChangeImageTransform())
+    }
+}
+
+class ListTransition : TransitionSet() {
+
+    init {
+        ordering = ORDERING_TOGETHER
+        addTransition(ChangeBounds())
+            .addTransition(Slide())
+            .duration = DURATION_FOR_MOVIE
     }
 }
