@@ -6,8 +6,6 @@ import androidx.work.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.petrgostev.myfirstproject.data.dataBase.MoviesDataBase
-import ru.petrgostev.myfirstproject.data.dataBase.entity.GenresEntity
-import ru.petrgostev.myfirstproject.data.dataBase.entity.ImagesEntity
 import ru.petrgostev.myfirstproject.data.repository.ConfigurationRepository
 import ru.petrgostev.myfirstproject.data.repository.IConfigurationRepository
 import ru.petrgostev.myfirstproject.di.App

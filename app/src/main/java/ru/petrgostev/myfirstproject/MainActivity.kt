@@ -2,14 +2,19 @@ package ru.petrgostev.myfirstproject
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
+import androidx.transition.*
 import ru.petrgostev.myfirstproject.ui.moviesDetails.MoviesDetailsFragment
 import ru.petrgostev.myfirstproject.ui.moviesList.MoviesListFragment
-import ru.petrgostev.myfirstproject.utils.*
+import ru.petrgostev.myfirstproject.utils.Connect
+import ru.petrgostev.myfirstproject.utils.ConnectionType
+import ru.petrgostev.myfirstproject.utils.NetworkMonitorUtil
+import ru.petrgostev.myfirstproject.utils.ToastUtil
+
+private const val DURATION_FOR_MOVIE: Long = 400
 
 class MainActivity : AppCompatActivity(), Router {
 
@@ -42,28 +47,28 @@ class MainActivity : AppCompatActivity(), Router {
         openMoviesDetailsFragmentFromIntent(intent)
     }
 
-    override fun openMoviesDetailsFragment(movieId: Int) {
+    override fun openMoviesDetailsFragment(view: View?, movieId: Int) {
         if (!Connect.isConnected) {
             ToastUtil.showToastNotConnected(this)
             return
         }
 
-        Handler().postDelayed({
-            supportFragmentManager.popBackStack(
-                FRAGMENT_MOVIE,
-                FragmentManager.POP_BACK_STACK_INCLUSIVE
-            )
-            supportFragmentManager.commit {
-                addToBackStack(FRAGMENT_MOVIE)
-                replace(R.id.fame, MoviesDetailsFragment.newInstance(movieId))
-            }
-        }, DURATION_FOR_MOVIE)
+        val moviesDetailsFragment = MoviesDetailsFragment.newInstance(movieId).apply {
+            sharedElementEnterTransition = DetailsTransition()
+            sharedElementReturnTransition = ListTransition()
+        }
+
+        supportFragmentManager.commit {
+            view?.let { addSharedElement(it, getString(R.string.shared_movie)) }
+            replace(R.id.fame, moviesDetailsFragment)
+            addToBackStack(null)
+        }
     }
 
     private fun openMoviesDetailsFragmentFromIntent(intent: Intent?) {
         intent?.let {
             val id = intent.data?.lastPathSegment?.toLongOrNull()
-            id?.let { openMoviesDetailsFragment(id.toInt()) }
+            id?.let { openMoviesDetailsFragment(null, id.toInt()) }
         }
     }
 
@@ -72,15 +77,9 @@ class MainActivity : AppCompatActivity(), Router {
             showNetworkErrorDialog()
             return
         }
-        Handler().postDelayed({
-            if (Connect.isConnected) {
-                supportFragmentManager.beginTransaction()
-                    .add(R.id.fame, MoviesListFragment())
-                    .commit()
-            } else {
-                showNetworkErrorDialog()
-            }
-        }, DURATION_FOR_LIST_MOVIES)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fame, MoviesListFragment())
+            .commit()
     }
 
     private fun initNetworkMonitor() {
@@ -114,7 +113,26 @@ class MainActivity : AppCompatActivity(), Router {
 
     companion object {
         private const val DURATION_FOR_LIST_MOVIES: Long = 200
-        private const val DURATION_FOR_MOVIE: Long = 400
         private const val FRAGMENT_MOVIE = "movie"
+    }
+}
+
+class DetailsTransition : TransitionSet() {
+
+    init {
+        ordering = ORDERING_TOGETHER
+        addTransition(ChangeBounds())
+            .addTransition(ChangeTransform())
+            .addTransition(ChangeImageTransform())
+    }
+}
+
+class ListTransition : TransitionSet() {
+
+    init {
+        ordering = ORDERING_TOGETHER
+        addTransition(ChangeBounds())
+            .addTransition(Slide())
+            .duration = DURATION_FOR_MOVIE
     }
 }

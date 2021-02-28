@@ -21,6 +21,8 @@
 
     <string name="film_high_rating">Фильм с высоким рейтингом!</string>
 
+    <string name="shared_movie">movie_container</string>
+
     <string-array name="spinner_items">
         <item>popular</item>
         <item>rated</item>

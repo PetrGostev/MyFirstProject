@@ -9,10 +9,11 @@ import androidx.fragment.app.viewModels
 import coil.load
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.data.dataBase.MoviesDataBase
+import ru.petrgostev.myfirstproject.data.network.pojo.MovieDetailsResponse
+import ru.petrgostev.myfirstproject.data.repository.IMoviesRepository
+import ru.petrgostev.myfirstproject.data.repository.MoviesRepository
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesDetailsBinding
 import ru.petrgostev.myfirstproject.di.App
-import ru.petrgostev.myfirstproject.data.network.pojo.MovieDetailsResponse
-import ru.petrgostev.myfirstproject.data.repository.*
 
 class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
     private val networkModule = App.component.getNetworkModule()
@@ -34,9 +35,7 @@ class MoviesDetailsFragment : Fragment(R.layout.fragment_movies_details) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewBinding = FragmentMoviesDetailsBinding.bind(view)
-
         viewModel.movie.observe(this.viewLifecycleOwner, this::setupMovie)
     }
 

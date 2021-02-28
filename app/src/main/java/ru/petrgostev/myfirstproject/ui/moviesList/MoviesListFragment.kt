@@ -10,23 +10,26 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.transition.Fade
 import androidx.work.WorkManager
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ru.petrgostev.myfirstproject.R
 import ru.petrgostev.myfirstproject.Router
+import ru.petrgostev.myfirstproject.data.backgroundWorker.BackgroundWorkRepository
 import ru.petrgostev.myfirstproject.data.dataBase.MoviesDataBase
+import ru.petrgostev.myfirstproject.data.dataBase.entity.MoviesEntity
 import ru.petrgostev.myfirstproject.data.repository.ConfigurationRepository
 import ru.petrgostev.myfirstproject.data.repository.IConfigurationRepository
 import ru.petrgostev.myfirstproject.data.repository.IMoviesRepository
 import ru.petrgostev.myfirstproject.data.repository.MoviesRepository
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesListBinding
+import ru.petrgostev.myfirstproject.di.App
 import ru.petrgostev.myfirstproject.ui.moviesList.adapter.MovieViewsAdapter
 import ru.petrgostev.myfirstproject.ui.moviesList.padding.adapter.MovieLoadStateAdapter
-import ru.petrgostev.myfirstproject.data.backgroundWorker.BackgroundWorkRepository
-import ru.petrgostev.myfirstproject.data.dataBase.entity.MoviesEntity
-import ru.petrgostev.myfirstproject.di.App
-import ru.petrgostev.myfirstproject.utils.*
+import ru.petrgostev.myfirstproject.utils.Category
+import ru.petrgostev.myfirstproject.utils.Connect
+import ru.petrgostev.myfirstproject.utils.ToastUtil
 
 class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
 
@@ -61,9 +64,9 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
     private var category: Category = Category.POPULAR
 
     private val adapter: MovieViewsAdapter by lazy {
-        MovieViewsAdapter { movie: MoviesEntity ->
-            movie.id.let { parentRouter?.openMoviesDetailsFragment(it.toInt()) }
-        }
+        MovieViewsAdapter(fun(view: View, movie: MoviesEntity) {
+            parentRouter?.openMoviesDetailsFragment(view, movie.id.toInt())
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,6 +93,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         initAdapter()
 
         viewBinding?.retryButton?.setOnClickListener { adapter.retry() }
+        exitTransition = Fade()
     }
 
     private fun initAdapter() {
@@ -98,7 +102,8 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
             footer = MovieLoadStateAdapter { adapter.retry() }
         )
         adapter.addLoadStateListener { loadState ->
-            viewBinding?.moviesRecycler?.isVisible = loadState.source.refresh is LoadState.NotLoading
+            viewBinding?.moviesRecycler?.isVisible =
+                loadState.source.refresh is LoadState.NotLoading
             viewBinding?.loader?.isVisible = loadState.source.refresh is LoadState.Loading
             viewBinding?.moviesSwipe?.isRefreshing = false
             viewBinding?.retryButton?.isVisible = loadState.source.refresh is LoadState.Error
@@ -182,6 +187,7 @@ class MoviesListFragment : Fragment(R.layout.fragment_movies_list) {
         private const val POSITION_POPULAR = 0
         private const val POSITION_TOP_RATED = 1
         private const val POSITION_UPCOMING = 2
-
+        private const val FRAGMENT_MOVIE = "movie"
+        private const val MOVIE_ID = "movieId"
     }
 }

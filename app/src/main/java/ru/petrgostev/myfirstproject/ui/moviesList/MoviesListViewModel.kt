@@ -11,7 +11,6 @@ import ru.petrgostev.myfirstproject.data.dataBase.entity.*
 import ru.petrgostev.myfirstproject.data.repository.IConfigurationRepository
 import ru.petrgostev.myfirstproject.data.repository.IMoviesRepository
 import ru.petrgostev.myfirstproject.utils.*
-import java.util.*
 
 class MoviesListViewModel(
     private val configurationRepository: IConfigurationRepository,

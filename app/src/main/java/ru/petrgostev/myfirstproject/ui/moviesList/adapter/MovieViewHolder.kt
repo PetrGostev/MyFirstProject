@@ -26,7 +26,6 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
 
         movieAgeLimit.text = itemView.context.getString(R.string.age_limit, moviesItem.minimumAge)
-        //TODO 01: movieLike.setImageResource(resId)
         movieGenres.text = moviesItem.genre
         movieRating.rating = moviesItem.rating_5
         movieReviewsQuantity.text = itemView.context.getString(R.string.reviews_quantity, moviesItem.voteCount)

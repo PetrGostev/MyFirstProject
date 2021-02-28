@@ -19,6 +19,6 @@ class GenresItem(
 
 	@SerialName("id")
 	val id: Int
-){
-	fun toGenresEntity() = GenresEntity(id = id.toLong(), name = name)
+) {
+    fun toGenresEntity() = GenresEntity(id = id.toLong(), name = name)
 }

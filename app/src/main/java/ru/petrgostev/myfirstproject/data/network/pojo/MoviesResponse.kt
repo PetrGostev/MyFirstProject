@@ -48,7 +48,7 @@ data class MoviesItem(
     @SerialName("vote_count")
     val voteCount: Int?
 ) {
-    val moviePoster:String = ImagesBaseUrl.IMAGES_BASE_URL + PosterSizeEnum.W500.size + posterPath
+    val moviePoster: String = ImagesBaseUrl.IMAGES_BASE_URL + PosterSizeEnum.W500.size + posterPath
     val rating_5: Float = (voteAverage / 2).toFloat()
     val minimumAge: Int = if (adult) Adult.ADULT else Adult.NOT_ADULT
 
