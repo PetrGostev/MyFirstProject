@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.ui.moviesList.padding.adapter
+package ru.petrgostev.myfirstproject.ui.moviesList.pagging.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

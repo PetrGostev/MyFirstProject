@@ -26,7 +26,7 @@ import ru.petrgostev.myfirstproject.data.repository.MoviesRepository
 import ru.petrgostev.myfirstproject.databinding.FragmentMoviesListBinding
 import ru.petrgostev.myfirstproject.di.App
 import ru.petrgostev.myfirstproject.ui.moviesList.adapter.MovieViewsAdapter
-import ru.petrgostev.myfirstproject.ui.moviesList.padding.adapter.MovieLoadStateAdapter
+import ru.petrgostev.myfirstproject.ui.moviesList.pagging.adapter.MovieLoadStateAdapter
 import ru.petrgostev.myfirstproject.utils.Category
 import ru.petrgostev.myfirstproject.utils.Connect
 import ru.petrgostev.myfirstproject.utils.ToastUtil

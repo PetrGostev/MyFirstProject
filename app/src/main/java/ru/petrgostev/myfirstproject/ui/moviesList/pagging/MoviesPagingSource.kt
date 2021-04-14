@@ -1,4 +1,4 @@
-package ru.petrgostev.myfirstproject.ui.moviesList.padding
+package ru.petrgostev.myfirstproject.ui.moviesList.pagging
 
 import androidx.paging.PagingSource
 import retrofit2.HttpException

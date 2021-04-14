@@ -13,7 +13,7 @@ import ru.petrgostev.myfirstproject.data.network.pojo.MovieDetailsResponse
 import ru.petrgostev.myfirstproject.data.network.pojo.MoviesItem
 import ru.petrgostev.myfirstproject.data.notifications.IMovieNotifications
 import ru.petrgostev.myfirstproject.data.notifications.MovieNotifications
-import ru.petrgostev.myfirstproject.ui.moviesList.padding.MoviesPagingSource
+import ru.petrgostev.myfirstproject.ui.moviesList.pagging.MoviesPagingSource
 import ru.petrgostev.myfirstproject.utils.Category
 import ru.petrgostev.myfirstproject.utils.MoviesDate
 import ru.petrgostev.myfirstproject.utils.Page
