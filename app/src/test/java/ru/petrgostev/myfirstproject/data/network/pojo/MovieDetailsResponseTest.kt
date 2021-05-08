@@ -1,16 +1,16 @@
 package ru.petrgostev.myfirstproject.data.network.pojo
 
-import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class MoviesItemTest {
+import org.junit.Assert.*
+
+class MovieDetailsResponseTest {
 
     @Test
     fun startKeys() {
         getMoviePoster()
         getRating_5()
         getMinimumAge()
-        getGenre()
     }
 
     @Test
@@ -35,26 +35,5 @@ class MoviesItemTest {
         adult = false
         limitAdult = if (adult) 18 else 0
         assertEquals(0, limitAdult)
-    }
-
-    @Test
-    fun getGenre() {
-        val genresMap = mutableMapOf<Int, String>()
-        genresMap[1] = "Триллер"
-        genresMap[2] = "Драма"
-        genresMap[3] = "Боевик"
-        genresMap[4] = "Ужасы"
-        genresMap[5] = "Мелодрама"
-
-        val genreIds = mutableListOf<Int>()
-        genreIds.add(1)
-        genreIds.add(5)
-
-        val genres = mutableListOf<String>()
-        genreIds.forEach {
-            genres.add(genresMap.getValue(it))
-        }
-
-        assertEquals("Триллер, Мелодрама", genres.joinToString())
     }
 }

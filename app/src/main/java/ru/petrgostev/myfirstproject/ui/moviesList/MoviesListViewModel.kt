@@ -18,7 +18,7 @@ class MoviesListViewModel(
 ) : ViewModel() {
 
     private val _mutableIsConnected = MutableLiveData<Boolean>(true)
-    private val _mutableMoviesPagingList = MutableLiveData<PagingData<MoviesEntity>>()
+    val _mutableMoviesPagingList = MutableLiveData<PagingData<MoviesEntity>>()
 
     val isConnected: LiveData<Boolean> get() = _mutableIsConnected
     val moviesPagingList: LiveData<PagingData<MoviesEntity>> get() = _mutableMoviesPagingList
@@ -60,6 +60,7 @@ class MoviesListViewModel(
         moviesResult = moviesRepository.getMovies(category).cachedIn(viewModelScope)
         moviesResult?.observeForever(pagingObserver)
     }
+
 
     override fun onCleared() {
         moviesResult?.removeObserver(pagingObserver)

@@ -10,7 +10,7 @@ import ru.petrgostev.myfirstproject.data.repository.IMoviesRepository
 
 class MoviesDetailsViewModel(private val moviesRepository: IMoviesRepository) : ViewModel() {
 
-    private val _mutableMovie = MutableLiveData<MovieDetailsResponse>()
+    val _mutableMovie = MutableLiveData<MovieDetailsResponse>()
     val movie: LiveData<MovieDetailsResponse> get() = _mutableMovie
 
     fun loadMovie(movieId: Int) {
