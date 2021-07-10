@@ -1,4 +1,4 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
 buildscript {
     ext.kotlin_version = "1.4.21"
     repositories {
@@ -10,18 +10,14 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:2.3.3"
-
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 
 ext {
     pagingVersion = '3.0.0-alpha12'
-    lifecycleVersion = '2.2.0'
+    lifecycleVersion = '2.3.1'
     daggerVersion = '2.27'
-    roomVersion = '2.2.6'
+    roomVersion = '2.3.0'
 }
 
 allprojects {
