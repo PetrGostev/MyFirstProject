@@ -77,9 +77,9 @@ class MainActivity : AppCompatActivity(), Router {
             showNetworkErrorDialog()
             return
         }
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fame, MoviesListFragment())
-            .commit()
+        supportFragmentManager.commit {
+            replace(R.id.fame, MoviesListFragment())
+        }
     }
 
     private fun initNetworkMonitor() {
