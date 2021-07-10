@@ -14,7 +14,7 @@ buildscript {
 }
 
 ext {
-    pagingVersion = '3.0.0-alpha12'
+    pagingVersion = '3.1.0-alpha02'
     lifecycleVersion = '2.3.1'
     daggerVersion = '2.27'
     roomVersion = '2.3.0'

@@ -1,6 +1,7 @@
 package ru.petrgostev.myfirstproject.ui.moviesList.pagging
 
 import androidx.paging.PagingSource
+import androidx.paging.PagingState
 import retrofit2.HttpException
 import ru.petrgostev.myfirstproject.data.dataBase.entity.MoviesEntity
 import ru.petrgostev.myfirstproject.data.repository.MoviesRepository
@@ -28,5 +29,9 @@ class MoviesPagingSource(
         } catch (exception: HttpException) {
             LoadResult.Error(exception)
         }
+    }
+
+    override fun getRefreshKey(state: PagingState<Int, MoviesEntity>): Int? {
+        TODO("Not yet implemented")
     }
 }
